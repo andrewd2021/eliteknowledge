@@ -1,0 +1,22 @@
+/* Elite Knowledge — wp-admin styling.
+ *
+ * RECONSTRUCTED FILE — minimal by design. Every admin screen in this
+ * plugin (Settings, Flagged Replies, Demo Data, Setup Guide) is built from
+ * plain core wp-admin markup (.wrap, .form-table, .widefat, button
+ * classes), which already looks correct without extra CSS. This file
+ * exists mainly so EK_Assets::enqueue_admin()'s wp_enqueue_style() call
+ * has something to load; add rules here as needed.
+ */
+
+.ek-settings .form-table td .description {
+	max-width: 640px;
+}
+
+.ek-dashboard-glance {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+.ek-dashboard-glance li {
+	padding: 0.35em 0;
+}

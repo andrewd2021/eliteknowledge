@@ -1,0 +1,16 @@
+# OS / editor cruft
+.DS_Store
+Thumbs.db
+*.swp
+.vscode/
+.idea/
+
+# Dependency directories (none currently, kept for future-proofing)
+node_modules/
+vendor/
+
+# Build artifacts / packaged zips
+*.zip
+
+# Local environment files
+.env

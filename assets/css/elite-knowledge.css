@@ -1,0 +1,695 @@
+/* Elite Knowledge — front-end styles
+ *
+ * Deliberately self-contained: every rule below is scoped under one of the
+ * plugin's own root classes (.ek-wrap, .ek-hero, .ek-widget-list,
+ * .ek-breadcrumbs) and declares its own values for the properties themes
+ * most commonly set globally (color, text-transform, list-style,
+ * font-family, link color) — so the plugin looks the same regardless of
+ * how aggressive the active theme's base styles are, without needing
+ * !important or fighting the theme's stylesheet load order.
+ *
+ * RECONSTRUCTED FILE — the :root tokens, base reset, and Topics section
+ * below are restored/kept exactly as last verified this session. Every
+ * other section (Hero, Hub, Forums, Discussion/Replies, FAQ, Documents,
+ * Search, My Activity, pagination, forms, badges) is rebuilt from scratch
+ * against the same token system and every class name actually referenced
+ * in the restored PHP/JS, since the original values for those sections
+ * were never read/saved. Visual details there will differ from the
+ * original; class coverage should not.
+ */
+
+.ek-wrap,
+.ek-hero,
+.ek-widget-list,
+.ek-breadcrumbs,
+/* [ek_search] is meant to be droppable anywhere — including a theme
+ * sidebar/widget area on a singular page, outside the page's own .ek-wrap
+ * entirely (see templates/knowledge-center/sidebar.php in the indiethree
+ * theme). Without its own copy of these tokens, every var(--ek-*) below
+ * resolves to nothing there, which is why that occurrence rendered with
+ * no button styling at all — an invalid `background: linear-gradient(var
+ * (--undefined), ...)` computes to no background, not a fallback color. */
+.ek-search-form {
+	--ek-text: #1a1d29;
+	--ek-muted: #667085;
+	--ek-border: #e6e8ee;
+	--ek-surface: #ffffff;
+	--ek-surface-muted: #f6f7fb;
+	--ek-primary: #4f46e5;
+	--ek-primary-hover: #3f36c9;
+	--ek-radius: 14px;
+	--ek-shadow: 0 1px 2px rgba(16, 24, 40, 0.06), 0 2px 8px rgba(16, 24, 40, 0.06);
+	--ek-shadow-hover: 0 8px 24px rgba(16, 24, 40, 0.12);
+
+	/* Accent cycle used for card top-bars, icon chips, and FAQ numbers. */
+	--ek-accent-0: #4f46e5;
+	--ek-accent-1: #0891b2;
+	--ek-accent-2: #d946ef;
+	--ek-accent-3: #f59e0b;
+	--ek-accent-4: #16a34a;
+	--ek-accent-5: #e11d48;
+
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+	font-size: 16px;
+	line-height: 1.6;
+	color: var(--ek-text);
+	text-transform: none;
+	letter-spacing: normal;
+	font-weight: 400;
+	/* Tells the browser this UI is authored for light mode specifically —
+	 * without it, a browser's "force dark mode on web content" setting can
+	 * repaint form control text/backgrounds independently of each other,
+	 * which is the usual cause of a search box ending up with white text
+	 * on its own (still white) background. */
+	color-scheme: light;
+}
+
+.ek-wrap *,
+.ek-hero *,
+.ek-widget-list *,
+.ek-breadcrumbs *,
+.ek-search-form * {
+	box-sizing: border-box;
+}
+
+.ek-wrap h1, .ek-wrap h2, .ek-wrap h3, .ek-wrap h4,
+.ek-wrap p, .ek-wrap span, .ek-wrap div, .ek-wrap li, .ek-wrap td, .ek-wrap th, .ek-wrap label, .ek-wrap button, .ek-wrap input, .ek-wrap textarea, .ek-wrap select,
+.ek-hero h1, .ek-hero p, .ek-hero span, .ek-hero div,
+.ek-widget-list li, .ek-widget-list a,
+.ek-breadcrumbs span, .ek-breadcrumbs a,
+.ek-search-form span, .ek-search-form button, .ek-search-form input {
+	text-transform: none;
+	letter-spacing: normal;
+	font-family: inherit;
+}
+
+.ek-wrap a,
+.ek-widget-list a,
+.ek-breadcrumbs a {
+	color: var(--ek-primary);
+	text-decoration: none;
+}
+.ek-wrap a:hover,
+.ek-widget-list a:hover,
+.ek-breadcrumbs a:hover {
+	color: var(--ek-primary-hover);
+	text-decoration: underline;
+}
+
+.ek-wrap ul { list-style: none; margin: 0; padding: 0; }
+
+.ek-wrap {
+	max-width: 1040px;
+	margin: 0 auto;
+	padding: 2.5em 1.25em 4em;
+}
+
+.ek-icon { width: 1em; height: 1em; flex-shrink: 0; }
+.ek-icon-inline { width: 0.95em; height: 0.95em; margin-right: 0.4em; vertical-align: -0.15em; }
+
+/* ============================================================ Hero header */
+
+.ek-hero {
+	display: flex;
+	align-items: center;
+	gap: 1.5em;
+	flex-wrap: wrap;
+	padding: 2.25em 2em;
+	margin-bottom: 2em;
+	border-radius: var(--ek-radius);
+	color: #fff;
+	background: linear-gradient(135deg, var(--ek-hero-from, var(--ek-primary)), var(--ek-hero-to, var(--ek-primary-hover)));
+}
+.ek-hero--topics    { --ek-hero-from: #6366f1; --ek-hero-to: #4f46e5; }
+.ek-hero--forums    { --ek-hero-from: #0ea5b7; --ek-hero-to: #0891b2; }
+.ek-hero--faq       { --ek-hero-from: #a855f7; --ek-hero-to: #7e22ce; }
+.ek-hero--documents { --ek-hero-from: #f59e0b; --ek-hero-to: #d97706; }
+
+.ek-hero-icon {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 3.2em;
+	height: 3.2em;
+	flex-shrink: 0;
+	border-radius: 14px;
+	background: rgba(255, 255, 255, 0.18);
+}
+.ek-hero-icon .ek-icon { width: 1.6em; height: 1.6em; }
+
+.ek-hero-body { flex: 1 1 260px; min-width: 0; }
+.ek-hero-body .ek-archive-title { color: #fff; margin: 0 0 0.15em; }
+.ek-hero-subtitle { margin: 0; color: rgba(255, 255, 255, 0.85); font-size: 1.02em; }
+
+.ek-hero-count {
+	flex-shrink: 0;
+	padding: 0.5em 1.1em;
+	border-radius: 999px;
+	background: rgba(255, 255, 255, 0.18);
+	font-size: 0.85em;
+	font-weight: 600;
+	white-space: nowrap;
+}
+
+@media (max-width: 640px) {
+	.ek-hero { padding: 1.75em 1.5em; }
+}
+
+.ek-archive-title,
+.ek-entry-title {
+	font-size: 2em;
+	font-weight: 800;
+	line-height: 1.25;
+	margin: 0 0 0.6em;
+	color: var(--ek-text);
+}
+
+.ek-entry-header { margin-bottom: 1.5em; }
+.ek-entry-meta { color: var(--ek-muted); font-size: 0.9em; margin-bottom: 0.75em; }
+.ek-entry-content { font-size: 1.02em; line-height: 1.75; }
+.ek-entry-content p:last-child { margin-bottom: 0; }
+.ek-entry-image { margin: 1.25em 0; }
+.ek-entry-image img { width: 100%; height: auto; border-radius: var(--ek-radius); display: block; }
+.ek-entry-categories { margin-bottom: 1em; display: flex; flex-wrap: wrap; gap: 0.5em; }
+
+.ek-breadcrumb { margin: 0 0 1.25em; font-size: 0.92em; }
+.ek-breadcrumb a { display: inline-flex; align-items: center; gap: 0.35em; }
+
+/* ============================================================ Buttons / inputs */
+
+.ek-button {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.4em;
+	padding: 0.7em 1.5em;
+	border-radius: 999px;
+	border: none;
+	background: linear-gradient(135deg, var(--ek-primary), var(--ek-primary-hover));
+	font-weight: 600;
+	font-size: 1em;
+	cursor: pointer;
+	transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+/* ".ek-wrap a" earlier in this file sets color: var(--ek-primary) with
+ * specificity (0,0,1,1) — one class + the "a" type selector — which beats
+ * a bare ".ek-button" (0,0,1,0) on every <a class="ek-button"> use (View
+ * Topic, Download, etc.), leaving indigo text on an indigo gradient
+ * background. Scoping under .ek-wrap here matches that specificity and
+ * wins on the extra class, regardless of source order. */
+.ek-wrap .ek-button, .ek-search-form .ek-button,
+.ek-wrap .ek-button:visited, .ek-search-form .ek-button:visited {
+	color: #fff;
+}
+/* Same specificity trap as above, but on :hover — ".ek-wrap a:hover"
+ * (0,0,2,1) switches link text to --ek-primary-hover, which beats a bare
+ * ".ek-button:hover" (0,0,2,0) and lands nearly invisible against the
+ * button's own gradient (which uses that exact color as its darker end). */
+.ek-wrap .ek-button:hover, .ek-search-form .ek-button:hover {
+	color: #fff;
+	text-decoration: none;
+	box-shadow: var(--ek-shadow-hover);
+	transform: translateY(-1px);
+}
+.ek-button:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+/* Scoped under .ek-wrap/.ek-hero/.ek-search-form for the same reason as
+ * the button fixes above — a theme's own "input { color: ... }" rule,
+ * even at lower specificity on paper, can still win in practice
+ * (forced-dark-mode form repainting, !important rules scoped to a wrapper
+ * class our markup happens to sit inside, etc.), and text/background on a
+ * form field going invisible is the least forgiving place for that to go
+ * wrong. */
+.ek-wrap .ek-input, .ek-wrap .ek-textarea,
+.ek-hero .ek-input, .ek-hero .ek-textarea,
+.ek-search-form .ek-input, .ek-search-form .ek-textarea {
+	width: 100%;
+	padding: 0.7em 0.95em;
+	border-radius: 10px;
+	border: 1px solid var(--ek-border);
+	background: var(--ek-surface);
+	color: var(--ek-text);
+	font-size: 1em;
+	font-family: inherit;
+}
+.ek-wrap .ek-input:focus, .ek-wrap .ek-textarea:focus,
+.ek-hero .ek-input:focus, .ek-hero .ek-textarea:focus,
+.ek-search-form .ek-input:focus, .ek-search-form .ek-textarea:focus {
+	outline: none;
+	border-color: var(--ek-primary);
+	box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15);
+}
+.ek-wrap .ek-input::placeholder, .ek-wrap .ek-textarea::placeholder,
+.ek-hero .ek-input::placeholder, .ek-hero .ek-textarea::placeholder,
+.ek-search-form .ek-input::placeholder, .ek-search-form .ek-textarea::placeholder {
+	color: var(--ek-muted);
+	opacity: 1;
+}
+.ek-textarea { resize: vertical; min-height: 6em; }
+
+.ek-new-discussion-form,
+.ek-edit-discussion-form {
+	background: var(--ek-surface);
+	border: 1px solid var(--ek-border);
+	border-radius: var(--ek-radius);
+	box-shadow: var(--ek-shadow);
+	padding: 1.5em;
+	margin-bottom: 1.75em;
+}
+.ek-new-discussion-form p { margin: 0 0 1.1em; }
+.ek-new-discussion-form label { display: block; font-weight: 600; margin-bottom: 0.4em; }
+.ek-cancel-edit { margin-left: 0.75em; }
+.ek-captcha { background: var(--ek-surface-muted); border-radius: 10px; padding: 1em; }
+
+/* ============================================================ Badges */
+
+.ek-badge {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.3em;
+	padding: 0.25em 0.7em;
+	border-radius: 999px;
+	font-size: 0.75em;
+	font-weight: 700;
+	border: 1px solid var(--ek-border);
+	background: var(--ek-surface-muted);
+	color: var(--ek-muted);
+	vertical-align: middle;
+}
+.ek-badge-pinned { background: #fff4d6; color: #92650b; border-color: #f6dfa0; }
+.ek-badge-closed { background: #fde3e3; color: #b42318; border-color: #f5b8b8; }
+.ek-badge-solved { background: #e6f7ec; color: #0f7a3d; border-color: #b6e6c8; }
+.ek-badge-verified { background: #e8edff; color: #3538cd; border-color: #c7d2fe; margin-left: 0.35em; }
+.ek-badge-access { margin-bottom: 0.6em; }
+.ek-badge-access-public { background: #e6f7ec; color: #0f7a3d; border-color: #b6e6c8; }
+.ek-badge-access-logged-in { background: #e8edff; color: #3538cd; border-color: #c7d2fe; }
+.ek-badge-access-verified { background: #e8edff; color: #3538cd; border-color: #c7d2fe; }
+.ek-badge-access-restricted { background: #fbe9fb; color: #a1149b; border-color: #f3c6f2; }
+
+.ek-empty,
+.ek-notice {
+	padding: 1.1em 1.35em;
+	background: var(--ek-surface-muted);
+	border: 1px solid var(--ek-border);
+	border-left: 4px solid var(--ek-primary);
+	border-radius: 10px;
+	color: var(--ek-text);
+}
+
+.ek-auth-gate {
+	margin: 1.5em 0;
+}
+.ek-auth-gate h3 {
+	margin: 0 0 0.5em;
+}
+.ek-auth-gate .ek-notice {
+	margin: 0;
+}
+
+/* ============================================================ Animations */
+
+.ek-topics-list > *, .ek-documents-list > *, .ek-forums-list > *, .ek-faq-item, .ek-search-result, .ek-replies-list > * {
+	animation: ek-fade-up 0.45s ease both;
+}
+.ek-topics-list > *:nth-child(1), .ek-documents-list > *:nth-child(1), .ek-forums-list > *:nth-child(1), .ek-faq-item:nth-child(1) { animation-delay: 0.02s; }
+.ek-topics-list > *:nth-child(2), .ek-documents-list > *:nth-child(2), .ek-forums-list > *:nth-child(2), .ek-faq-item:nth-child(2) { animation-delay: 0.07s; }
+.ek-topics-list > *:nth-child(3), .ek-documents-list > *:nth-child(3), .ek-forums-list > *:nth-child(3), .ek-faq-item:nth-child(3) { animation-delay: 0.12s; }
+.ek-topics-list > *:nth-child(4), .ek-documents-list > *:nth-child(4), .ek-forums-list > *:nth-child(4), .ek-faq-item:nth-child(4) { animation-delay: 0.17s; }
+.ek-topics-list > *:nth-child(5), .ek-documents-list > *:nth-child(5), .ek-forums-list > *:nth-child(5), .ek-faq-item:nth-child(5) { animation-delay: 0.22s; }
+.ek-topics-list > *:nth-child(n+6), .ek-documents-list > *:nth-child(n+6), .ek-forums-list > *:nth-child(n+6), .ek-faq-item:nth-child(n+6) { animation-delay: 0.26s; }
+
+@keyframes ek-fade-up {
+	from { opacity: 0; transform: translateY(8px); }
+	to { opacity: 1; transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.ek-hero, .ek-topics-list > *, .ek-documents-list > *, .ek-forums-list > *, .ek-faq-item, .ek-search-result, .ek-replies-list > * {
+		animation: none;
+	}
+}
+
+/* ============================================================ Hub */
+
+.ek-hub-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.25em; margin-bottom: 2em; }
+.ek-hub-card {
+	display: flex;
+	align-items: center;
+	gap: 1em;
+	padding: 1.5em;
+	background: var(--ek-surface);
+	border: 1px solid var(--ek-border);
+	border-radius: var(--ek-radius);
+	box-shadow: var(--ek-shadow);
+	color: var(--ek-text);
+	transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+.ek-hub-card:hover { box-shadow: var(--ek-shadow-hover); transform: translateY(-3px); text-decoration: none; }
+.ek-hub-card-icon {
+	display: inline-flex; align-items: center; justify-content: center;
+	width: 2.75em; height: 2.75em; border-radius: 12px; flex-shrink: 0;
+	background: var(--ek-surface-muted); color: var(--ek-primary);
+}
+.ek-hub-card--forums .ek-hub-card-icon { color: var(--ek-accent-1); }
+.ek-hub-card--faq .ek-hub-card-icon { color: var(--ek-accent-2); }
+.ek-hub-card--documents .ek-hub-card-icon { color: var(--ek-accent-3); }
+.ek-hub-card-icon .ek-icon { width: 1.4em; height: 1.4em; }
+.ek-hub-card-body { flex: 1 1 auto; min-width: 0; }
+.ek-hub-card-body h3 { margin: 0 0 0.35em; font-size: 1.15em; font-weight: 700; color: var(--ek-text); }
+.ek-hub-card-body p { margin: 0 0 0.5em; color: var(--ek-muted); font-size: 0.92em; }
+.ek-hub-card-count { font-size: 0.8em; font-weight: 600; color: var(--ek-primary); }
+.ek-hub-card-arrow { flex-shrink: 0; color: var(--ek-muted); }
+
+/* ============================================================ Topics */
+
+.ek-topics-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); gap: 1.25em; align-items: stretch; }
+.ek-topic-card {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	padding: 1.5em 1.5em 1.4em;
+	background: var(--ek-surface);
+	border: 1px solid var(--ek-border);
+	border-radius: var(--ek-radius);
+	box-shadow: var(--ek-shadow);
+	transition: box-shadow 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
+	overflow: hidden;
+}
+.ek-topic-card::before {
+	content: "";
+	position: absolute;
+	top: 0; left: 0; right: 0;
+	height: 4px;
+	background: var(--ek-accent, var(--ek-accent-0));
+}
+.ek-topics-list > *:nth-child(6n+1) { --ek-accent: var(--ek-accent-0); }
+.ek-topics-list > *:nth-child(6n+2) { --ek-accent: var(--ek-accent-1); }
+.ek-topics-list > *:nth-child(6n+3) { --ek-accent: var(--ek-accent-2); }
+.ek-topics-list > *:nth-child(6n+4) { --ek-accent: var(--ek-accent-3); }
+.ek-topics-list > *:nth-child(6n+5) { --ek-accent: var(--ek-accent-4); }
+.ek-topics-list > *:nth-child(6n+6) { --ek-accent: var(--ek-accent-5); }
+.ek-topic-card:hover { box-shadow: var(--ek-shadow-hover); transform: translateY(-3px); border-color: transparent; }
+/* Three classes deep (rather than the usual single ".ek-topic-card h3")
+ * so this reliably outranks a theme's own wrapper-scoped "h3 { font-size:
+ * ... }" rule regardless of stylesheet load order — a theme override
+ * template can nest .ek-wrap inside its own two-class container (as
+ * indiethree's elite-knowledge/archive-ek_topic.php does, colliding with
+ * its style.css's ".gt-news-details-wrapper .gt-news-details-content h3"),
+ * which ties a mere two-class version of this selector and wins on
+ * source order since theme stylesheets tend to enqueue after this one. */
+.ek-wrap .ek-topics-list .ek-topic-card h3 {
+	margin: 0.4em 0 0.5em;
+	font-size: 1.15em;
+	line-height: 1.35;
+	font-weight: 700;
+	overflow-wrap: break-word;
+	word-break: break-word;
+}
+.ek-topic-card h3 a { color: var(--ek-text); }
+.ek-topic-card h3 a:hover { color: var(--ek-primary); text-decoration: none; }
+.ek-topic-excerpt { color: var(--ek-muted); font-size: 0.95em; margin-bottom: 1.1em; }
+/* margin-top: auto + the card's flex column layout keeps this pinned to
+ * the bottom of every card in a row, even when a shorter excerpt would
+ * otherwise leave it sitting higher than its neighbors' buttons. */
+.ek-topic-view { margin-top: auto; align-self: flex-start; font-size: 0.9em; padding: 0.55em 1.2em; }
+
+/* Related topics */
+.ek-related-topics { margin: 2.5em 0; padding-top: 1.5em; border-top: 1px solid var(--ek-border); }
+.ek-related-topics h2 { font-size: 1.2em; margin: 0 0 0.75em; }
+
+/* Reusable list (widgets, my-activity, related topics) */
+.ek-widget-list { margin: 0; padding: 0; }
+.ek-widget-list li { padding: 0.5em 0; border-bottom: 1px solid var(--ek-border); }
+.ek-widget-list li:last-child { border-bottom: none; }
+
+/* ============================================================ Forums */
+.ek-forums-list { display: flex; flex-direction: column; gap: 0.9em; }
+.ek-forum-row {
+	display: flex;
+	align-items: center;
+	gap: 1em;
+	padding: 1.25em 1.4em;
+	background: var(--ek-surface);
+	border: 1px solid var(--ek-border);
+	border-radius: var(--ek-radius);
+	box-shadow: var(--ek-shadow);
+	color: var(--ek-text);
+	transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+.ek-forum-row:hover { box-shadow: var(--ek-shadow-hover); transform: translateY(-2px); text-decoration: none; }
+.ek-forum-icon {
+	display: inline-flex; align-items: center; justify-content: center;
+	width: 2.75em; height: 2.75em; border-radius: 12px; flex-shrink: 0;
+	background: var(--ek-surface-muted); color: var(--ek-accent-1);
+}
+.ek-forum-icon .ek-icon { width: 1.4em; height: 1.4em; }
+.ek-forum-body { flex: 1 1 auto; min-width: 0; }
+.ek-forum-row h3 { margin: 0 0 0.3em; font-size: 1.15em; font-weight: 700; color: var(--ek-text); }
+.ek-forum-desc { color: var(--ek-muted); font-size: 0.92em; margin-bottom: 0.4em; }
+.ek-forum-meta { display: flex; align-items: center; color: var(--ek-muted); font-size: 0.85em; }
+.ek-forum-arrow { flex-shrink: 0; color: var(--ek-muted); }
+
+/* Discussions table */
+.ek-discussions-table { width: 100%; border-collapse: collapse; margin: 1.5em 0; }
+.ek-discussions-table th {
+	text-align: left; padding: 0.75em 1em; font-size: 0.78em; text-transform: uppercase;
+	letter-spacing: 0.04em; color: var(--ek-muted); border-bottom: 2px solid var(--ek-border);
+}
+.ek-discussions-table td { padding: 0.9em 1em; border-bottom: 1px solid var(--ek-border); vertical-align: top; }
+.ek-discussions-table tr.ek-pinned { background: var(--ek-surface-muted); }
+.ek-discussion-author { color: var(--ek-muted); font-size: 0.85em; margin-top: 0.2em; }
+
+/* ============================================================ Discussion / toolbar */
+
+.ek-discussion-toolbar { display: flex; align-items: center; gap: 0.75em; margin-top: 1em; flex-wrap: wrap; }
+.ek-dropdown { position: relative; }
+.ek-dropdown-toggle {
+	display: inline-flex; align-items: center; gap: 0.4em;
+	padding: 0.55em 1em; border-radius: 999px; border: 1px solid var(--ek-border);
+	background: var(--ek-surface); color: var(--ek-text); cursor: pointer; font-size: 0.9em;
+}
+.ek-dropdown-toggle:hover { border-color: var(--ek-primary); color: var(--ek-primary); }
+.ek-dropdown-caret { font-size: 0.7em; }
+.ek-dropdown-menu {
+	position: absolute; top: calc(100% + 0.4em); left: 0; z-index: 20;
+	min-width: 220px; background: var(--ek-surface); border: 1px solid var(--ek-border);
+	border-radius: 10px; box-shadow: var(--ek-shadow-hover); padding: 0.4em;
+}
+.ek-dropdown-menu a, .ek-dropdown-menu button {
+	display: block; width: 100%; text-align: left; padding: 0.55em 0.7em;
+	border-radius: 6px; border: none; background: none; color: var(--ek-text);
+	font-size: 0.92em; cursor: pointer;
+}
+.ek-dropdown-menu a:hover, .ek-dropdown-menu button:hover { background: var(--ek-surface-muted); text-decoration: none; }
+.ek-dropdown-divider { height: 1px; background: var(--ek-border); margin: 0.4em 0; }
+.ek-toggle-subscription {
+	padding: 0.55em 1em; border-radius: 999px; border: 1px solid var(--ek-border);
+	background: var(--ek-surface); color: var(--ek-text); cursor: pointer; font-size: 0.9em;
+}
+.ek-toggle-subscription[data-state="on"] { border-color: var(--ek-primary); color: var(--ek-primary); }
+
+/* ============================================================ Replies / comments */
+
+.ek-discussion-replies { margin-top: 2.5em; padding-top: 1.75em; border-top: 1px solid var(--ek-border); }
+.ek-discussion-replies h2 { font-size: 1.3em; margin: 0 0 1.1em; }
+/* wp_list_comments() nests reply-to-reply threads in <ol class="children">
+ * (WordPress core's own markup for the 'html5' comment style), not a
+ * <ul> — targeting only "ul" here left those nested lists with the
+ * browser's default numbered-list styling and indent. */
+.ek-replies-list, .ek-replies-list ol, .ek-replies-list ul { list-style: none; margin: 0; padding: 0; }
+.ek-replies-list ol.children, .ek-replies-list ul { padding-left: 2.5em; margin-top: 1em; }
+.ek-reply { padding: 1.1em 0; border-bottom: 1px solid var(--ek-border); }
+.ek-reply-best { background: var(--ek-surface-muted); border-radius: 10px; padding: 1.1em; border-bottom: none; }
+.ek-reply-row { display: flex; gap: 0.9em; align-items: flex-start; }
+.ek-reply-avatar img { border-radius: 999px; display: block; }
+.ek-reply-body { flex: 1 1 auto; min-width: 0; }
+.ek-reply-meta { display: flex; align-items: center; flex-wrap: wrap; gap: 0.5em; margin-bottom: 0.4em; }
+.ek-reply-author { font-weight: 700; }
+.ek-reply-date, .ek-reply-edited { color: var(--ek-muted); font-size: 0.82em; }
+.ek-reply-content { line-height: 1.65; }
+.ek-best-answer-badge {
+	display: inline-block; margin-bottom: 0.5em; padding: 0.25em 0.7em; border-radius: 999px;
+	background: #e6f7ec; color: #0f7a3d; font-size: 0.75em; font-weight: 700;
+}
+.ek-reply-edit-form { margin-top: 0.75em; }
+.ek-reply-edit-actions { display: flex; gap: 0.6em; margin-top: 0.6em; }
+.ek-reply-actions { display: flex; flex-wrap: wrap; gap: 1em; margin-top: 0.6em; font-size: 0.85em; }
+.ek-reply-actions button, .ek-reply-actions a, .comment-reply-login {
+	background: none; border: none; padding: 0; color: var(--ek-muted); cursor: pointer; font-size: 1em;
+}
+.ek-reply-actions button:hover, .ek-reply-actions a:hover, .comment-reply-login:hover { color: var(--ek-primary); text-decoration: underline; }
+.ek-reply-actions .ek-delete-reply:hover, .ek-reply-actions .ek-flag-reply:hover { color: #b42318; }
+.ek-toggle-thread {
+	margin: 0.6em 0 0 3.5em; background: none; border: none; color: var(--ek-primary);
+	font-size: 0.85em; font-weight: 600; cursor: pointer; padding: 0;
+}
+.ek-reply-quote-preview:not(:empty) { margin: 0.75em 0; }
+.ek-reply-quote {
+	margin: 0; padding: 0.75em 1em; border-left: 3px solid var(--ek-primary);
+	background: var(--ek-surface-muted); border-radius: 0 8px 8px 0; font-size: 0.9em; color: var(--ek-muted);
+}
+.ek-reply-quote cite { display: block; font-weight: 700; color: var(--ek-text); font-style: normal; margin-bottom: 0.25em; }
+
+/* Comment form (shared with Topics' comment_form()) */
+#respond { margin-top: 1.5em; }
+#respond .comment-reply-title { font-size: 1.15em; margin: 0 0 0.75em; }
+.comment-form-comment label { display: block; font-weight: 600; margin-bottom: 0.4em; }
+.comment-form-comment textarea { width: 100%; }
+.form-submit input[type="submit"] {
+	display: inline-flex; align-items: center; gap: 0.4em; padding: 0.7em 1.5em; border-radius: 999px;
+	border: none; background: linear-gradient(135deg, var(--ek-primary), var(--ek-primary-hover));
+	color: #fff; font-weight: 600; cursor: pointer;
+}
+
+/* Related content sidebar block */
+.ek-discussion-related { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5em; margin-top: 2.5em; padding-top: 1.5em; border-top: 1px solid var(--ek-border); }
+.ek-related-block h3 { font-size: 1.05em; font-weight: 700; margin: 0 0 0.75em; }
+.ek-related-links li { padding: 0.4em 0; border-bottom: 1px solid var(--ek-border); }
+.ek-related-links li:last-child { border-bottom: none; }
+.ek-related-links a { display: flex; align-items: center; }
+
+/* ============================================================ FAQ */
+
+.ek-faq-group-title { font-size: 1.25em; margin: 2em 0 0.9em; }
+.ek-faq-group-title:first-child { margin-top: 0; }
+.ek-faq-accordion { border: 1px solid var(--ek-border); border-radius: var(--ek-radius); overflow: hidden; background: var(--ek-surface); margin-bottom: 1.5em; }
+.ek-faq-item { position: relative; border-bottom: 1px solid var(--ek-border); border-left: 4px solid var(--ek-accent, var(--ek-accent-0)); }
+.ek-faq-item:last-child { border-bottom: none; }
+/* Same accent cycle as .ek-topics-list, restarting per category group
+ * (nth-child counts within each .ek-faq-accordion's own children, and
+ * every category renders its own accordion — see EK_Shortcodes::faq()). */
+.ek-faq-accordion > .ek-faq-item:nth-child(6n+1) { --ek-accent: var(--ek-accent-0); }
+.ek-faq-accordion > .ek-faq-item:nth-child(6n+2) { --ek-accent: var(--ek-accent-1); }
+.ek-faq-accordion > .ek-faq-item:nth-child(6n+3) { --ek-accent: var(--ek-accent-2); }
+.ek-faq-accordion > .ek-faq-item:nth-child(6n+4) { --ek-accent: var(--ek-accent-3); }
+.ek-faq-accordion > .ek-faq-item:nth-child(6n+5) { --ek-accent: var(--ek-accent-4); }
+.ek-faq-accordion > .ek-faq-item:nth-child(6n+6) { --ek-accent: var(--ek-accent-5); }
+.ek-faq-question {
+	display: flex; align-items: center; justify-content: space-between; gap: 1em; width: 100%;
+	padding: 1.1em 1.4em; background: none; border: none; text-align: left; cursor: pointer;
+	font-size: 1em; font-weight: 600; color: var(--ek-text);
+}
+.ek-faq-question:hover { background: var(--ek-surface-muted); }
+.ek-faq-icon { transition: transform 0.2s ease; color: var(--ek-muted); flex-shrink: 0; }
+.ek-faq-question[aria-expanded="true"] .ek-faq-icon { transform: rotate(90deg); color: var(--ek-primary); }
+/* A "grid-template-rows: 0fr -> 1fr" trick was tried here first, but grid
+ * tracks don't clamp to 0 from their own intrinsic content size without an
+ * explicit min-height override — in practice every answer just stayed
+ * fully expanded regardless of aria-hidden. max-height is less elegant
+ * but collapses reliably with no such caveat; the generous cap just needs
+ * to clear the tallest realistic answer. */
+.ek-faq-answer {
+	max-height: 0;
+	overflow: hidden;
+	transition: max-height 0.25s ease;
+}
+.ek-faq-answer[aria-hidden="false"] { max-height: 2000px; }
+.ek-faq-answer-inner { padding: 0 1.4em 1.4em; color: var(--ek-muted); line-height: 1.7; }
+.ek-faq-feedback { margin-top: 1em; padding-top: 1em; border-top: 1px solid var(--ek-border); font-size: 0.9em; color: var(--ek-muted); display: flex; align-items: center; gap: 0.75em; flex-wrap: wrap; }
+.ek-faq-vote {
+	padding: 0.4em 1em; border-radius: 999px; border: 1px solid var(--ek-border);
+	background: var(--ek-surface); cursor: pointer; font-size: 0.9em;
+}
+.ek-faq-vote:hover { border-color: var(--ek-primary); color: var(--ek-primary); }
+
+.ek-faq-grid { display: grid; gap: 1.25em; }
+.ek-faq-grid-cols-1 { grid-template-columns: 1fr; }
+.ek-faq-grid-cols-2 { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+.ek-faq-grid-cols-3 { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+.ek-faq-grid-card {
+	position: relative;
+	background: var(--ek-surface);
+	border: 1px solid var(--ek-border);
+	border-radius: var(--ek-radius);
+	box-shadow: var(--ek-shadow);
+	padding: 1.4em;
+	overflow: hidden;
+}
+/* Same top-accent-bar treatment as .ek-topic-card, cycling the same palette. */
+.ek-faq-grid-card::before {
+	content: "";
+	position: absolute;
+	top: 0; left: 0; right: 0;
+	height: 4px;
+	background: var(--ek-accent, var(--ek-accent-0));
+}
+.ek-faq-grid > *:nth-child(6n+1) { --ek-accent: var(--ek-accent-0); }
+.ek-faq-grid > *:nth-child(6n+2) { --ek-accent: var(--ek-accent-1); }
+.ek-faq-grid > *:nth-child(6n+3) { --ek-accent: var(--ek-accent-2); }
+.ek-faq-grid > *:nth-child(6n+4) { --ek-accent: var(--ek-accent-3); }
+.ek-faq-grid > *:nth-child(6n+5) { --ek-accent: var(--ek-accent-4); }
+.ek-faq-grid > *:nth-child(6n+6) { --ek-accent: var(--ek-accent-5); }
+.ek-faq-grid-card h3 { margin: 0.4em 0 0.5em; font-size: 1.05em; font-weight: 700; }
+.ek-faq-grid-answer { color: var(--ek-muted); font-size: 0.94em; line-height: 1.65; }
+
+/* ============================================================ Documents */
+
+.ek-documents-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.25em; }
+.ek-document-card {
+	background: var(--ek-surface); border: 1px solid var(--ek-border); border-radius: var(--ek-radius);
+	box-shadow: var(--ek-shadow); padding: 1.5em; transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+.ek-document-card:hover { box-shadow: var(--ek-shadow-hover); transform: translateY(-3px); }
+.ek-document-icon {
+	display: inline-flex; align-items: center; justify-content: center; width: 2.75em; height: 2.75em;
+	border-radius: 12px; background: var(--ek-surface-muted); color: var(--ek-accent-3);
+	/* The icon and the access badge that follows it are both inline-level
+	 * with nothing but a collapsed HTML whitespace character between them
+	 * in the markup — margin-right is what actually creates the gap. */
+	margin: 0 0.75em 0.75em 0;
+}
+.ek-document-icon .ek-icon { width: 1.4em; height: 1.4em; }
+.ek-document-card h3 { margin: 0 0 0.4em; font-size: 1.1em; font-weight: 700; }
+.ek-document-card h3 a { color: var(--ek-text); }
+.ek-document-card h3 a:hover { color: var(--ek-primary); }
+.ek-document-meta { color: var(--ek-muted); font-size: 0.85em; margin-bottom: 0.9em; }
+.ek-download-button { width: 100%; justify-content: center; }
+
+.ek-versions-table { width: 100%; border-collapse: collapse; margin: 1em 0 1.5em; }
+.ek-versions-table th { text-align: left; padding: 0.6em 0.8em; font-size: 0.78em; text-transform: uppercase; color: var(--ek-muted); border-bottom: 2px solid var(--ek-border); }
+.ek-versions-table td { padding: 0.7em 0.8em; border-bottom: 1px solid var(--ek-border); }
+
+/* ============================================================ Search */
+
+.ek-search-form { display: flex; align-items: center; gap: 0.6em; background: var(--ek-surface); border: 1px solid var(--ek-border); border-radius: 999px; padding: 0.4em 0.4em 0.4em 1.1em; margin-bottom: 1.5em; }
+.ek-search-icon { color: var(--ek-muted); display: inline-flex; flex-shrink: 0; }
+.ek-search-form .ek-input { border: none; padding: 0.4em 0; }
+.ek-search-form .ek-input:focus { box-shadow: none; }
+.ek-search-form .ek-button { flex-shrink: 0; }
+
+.ek-search-results { margin-top: 1em; }
+.ek-search-summary { color: var(--ek-muted); margin-bottom: 1.5em; }
+.ek-search-result { padding: 1.25em 0; border-bottom: 1px solid var(--ek-border); }
+.ek-search-result:last-child { border-bottom: none; }
+.ek-search-type {
+	display: inline-block; margin-bottom: 0.4em; padding: 0.2em 0.65em; border-radius: 999px;
+	background: var(--ek-surface-muted); color: var(--ek-primary); font-size: 0.72em; font-weight: 700; text-transform: uppercase; letter-spacing: 0.03em;
+}
+.ek-search-result h3 { margin: 0.3em 0 0.4em; font-size: 1.15em; }
+.ek-search-result h3 a { color: var(--ek-text); }
+.ek-search-result h3 a:hover { color: var(--ek-primary); }
+.ek-search-excerpt { color: var(--ek-muted); }
+
+/* ============================================================ My Activity */
+
+.ek-my-activity h2 { font-size: 1.2em; margin: 1.75em 0 0.75em; }
+.ek-my-activity h2:first-child { margin-top: 0; }
+
+/* ============================================================ Pagination */
+
+.ek-pagination { margin-top: 2em; }
+.ek-pagination ul { display: flex; flex-wrap: wrap; gap: 0.4em; }
+.ek-pagination a, .ek-pagination span {
+	display: inline-flex; align-items: center; justify-content: center; min-width: 2.4em; height: 2.4em;
+	padding: 0 0.6em; border-radius: 8px; border: 1px solid var(--ek-border); color: var(--ek-text); font-size: 0.9em;
+}
+.ek-pagination a:hover { border-color: var(--ek-primary); color: var(--ek-primary); text-decoration: none; }
+.ek-pagination .current { background: var(--ek-primary); border-color: var(--ek-primary); color: #fff; }
+
+/* ============================================================ Responsive */
+
+@media (max-width: 700px) {
+	.ek-discussions-table thead { display: none; }
+	.ek-discussions-table, .ek-discussions-table tbody, .ek-discussions-table tr, .ek-discussions-table td { display: block; width: 100%; }
+	.ek-discussions-table tr { padding: 1em 0; border-bottom: 1px solid var(--ek-border); }
+	.ek-discussions-table td { padding: 0.2em 0; border-bottom: none; }
+}

@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Elite Knowledge — Test &amp; Walkthrough Guide</title>
+<style>
+  @font-face { font-family: 'system-serif'; src: local('Iowan Old Style'), local('Palatino Linotype'), local('Georgia'); }
+
+  :root {
+    --paper: #f7f6f3;
+    --paper-raised: #ffffff;
+    --ink: #1c1a1f;
+    --ink-muted: #5c5967;
+    --ink-faint: #8b8794;
+    --hairline: #e2ddd4;
+    --accent: #3f36c9;
+    --accent-ink: #ffffff;
+    --accent-soft: #ece9fb;
+    --good: #12735f;
+    --good-soft: #e1f3ee;
+    --warn: #92460b;
+    --warn-soft: #fbebd6;
+    --danger: #a3211f;
+    --danger-soft: #fbe4e1;
+    --code-bg: #efece4;
+    --code-ink: #453f2f;
+    --shadow: 0 1px 2px rgba(28,26,31,0.05), 0 6px 20px rgba(28,26,31,0.06);
+    --serif: 'system-serif', 'Iowan Old Style', 'Palatino Linotype', Georgia, 'Times New Roman', serif;
+    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --mono: ui-monospace, 'SFMono-Regular', Menlo, Consolas, 'Liberation Mono', monospace;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --paper: #17161b;
+      --paper-raised: #1f1e25;
+      --ink: #f1eee7;
+      --ink-muted: #a8a3b3;
+      --ink-faint: #726d7d;
+      --hairline: #34313d;
+      --accent: #a29bf7;
+      --accent-ink: #17161b;
+      --accent-soft: #2c2850;
+      --good: #57d1b5;
+      --good-soft: #17332c;
+      --warn: #f2b25a;
+      --warn-soft: #3a2a12;
+      --danger: #f28b82;
+      --danger-soft: #3a1c1a;
+      --code-bg: #232129;
+      --code-ink: #e8e3d3;
+      --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 6px 24px rgba(0,0,0,0.35);
+    }
+  }
+
+  * { box-sizing: border-box; }
+  html { color-scheme: light dark; }
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+  ::selection { background: var(--accent-soft); color: var(--ink); }
+
+  h1, h2, h3, h4 { font-family: var(--serif); font-weight: 700; line-height: 1.2; text-wrap: balance; color: var(--ink); }
+  a { color: var(--accent); }
+  code, .code {
+    font-family: var(--mono);
+    font-size: 0.88em;
+    background: var(--code-bg);
+    color: var(--code-ink);
+    padding: 0.1em 0.42em;
+    border-radius: 5px;
+    white-space: nowrap;
+  }
+
+  /* ---------------- masthead ---------------- */
+  .masthead {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 3.4em 2em 2em;
+  }
+  .eyebrow {
+    font-family: var(--mono);
+    font-size: 0.78em;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin: 0 0 0.9em;
+  }
+  .masthead h1 {
+    font-size: clamp(2.1em, 4vw, 2.85em);
+    margin: 0 0 0.4em;
+    max-width: 16ch;
+  }
+  .masthead .lede {
+    font-size: 1.12em;
+    color: var(--ink-muted);
+    max-width: 62ch;
+    margin: 0 0 1.6em;
+  }
+  .masthead .lede strong { color: var(--ink); font-weight: 600; }
+
+  .audience-row { display: flex; gap: 0.9em; flex-wrap: wrap; }
+  .audience-card {
+    flex: 1 1 220px;
+    background: var(--paper-raised);
+    border: 1px solid var(--hairline);
+    border-radius: 10px;
+    padding: 1em 1.15em;
+    box-shadow: var(--shadow);
+  }
+  .audience-card .k { font-family: var(--mono); font-size: 0.72em; letter-spacing: 0.07em; text-transform: uppercase; color: var(--ink-faint); }
+  .audience-card p { margin: 0.35em 0 0; font-size: 0.94em; color: var(--ink-muted); }
+
+  /* ---------------- progress bar ---------------- */
+  .progress-wrap {
+    position: sticky; top: 0; z-index: 30;
+    background: var(--paper);
+    border-bottom: 1px solid var(--hairline);
+  }
+  .progress-inner {
+    max-width: 1180px; margin: 0 auto; padding: 0.65em 2em;
+    display: flex; align-items: center; gap: 1em;
+  }
+  .progress-track { flex: 1 1 auto; height: 6px; border-radius: 4px; background: var(--hairline); overflow: hidden; }
+  .progress-fill { height: 100%; width: 0%; background: var(--accent); transition: width 0.25s ease; }
+  #progress-label { font-family: var(--mono); font-size: 0.78em; color: var(--ink-muted); white-space: nowrap; font-variant-numeric: tabular-nums; }
+  #reset-checklist {
+    font-family: var(--sans); font-size: 0.8em; color: var(--ink-muted); background: none;
+    border: 1px solid var(--hairline); border-radius: 6px; padding: 0.35em 0.7em; cursor: pointer;
+  }
+  #reset-checklist:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* ---------------- layout ---------------- */
+  .layout { max-width: 1180px; margin: 0 auto; display: grid; grid-template-columns: 250px minmax(0,1fr); gap: 3em; padding: 0 2em 6em; align-items: start; }
+  @media (max-width: 880px) { .layout { grid-template-columns: 1fr; } }
+
+  nav.toc { position: sticky; top: 3.2em; align-self: start; max-height: calc(100vh - 5em); overflow-y: auto; padding-right: 0.5em; }
+  @media (max-width: 880px) { nav.toc { position: static; max-height: none; margin-bottom: 1em; } }
+  nav.toc .toc-title { font-family: var(--mono); font-size: 0.72em; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 0.9em; }
+  nav.toc ol { list-style: none; margin: 0; padding: 0; counter-reset: toc; }
+  nav.toc li { counter-increment: toc; margin-bottom: 0.15em; }
+  nav.toc a {
+    display: flex; gap: 0.6em; align-items: baseline; text-decoration: none; color: var(--ink-muted);
+    font-size: 0.92em; padding: 0.35em 0.4em; border-radius: 6px;
+  }
+  nav.toc a::before {
+    content: counter(toc, decimal-leading-zero);
+    font-family: var(--mono); font-size: 0.82em; color: var(--ink-faint); flex-shrink: 0;
+  }
+  nav.toc a:hover { background: var(--accent-soft); color: var(--ink); }
+  nav.toc .toc-sub { list-style: none; margin: 0.1em 0 0.4em 1.6em; padding: 0; }
+  nav.toc .toc-sub a { font-size: 0.85em; padding: 0.2em 0.4em; }
+  nav.toc .toc-sub a::before { content: '—'; font-family: var(--sans); }
+
+  main { min-width: 0; }
+  section { margin-bottom: 3.6em; scroll-margin-top: 4.2em; }
+  section > .phase-tag {
+    font-family: var(--mono); font-size: 0.76em; letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--accent); margin: 0 0 0.5em;
+  }
+  section h2 { font-size: 1.65em; margin: 0 0 0.55em; padding-bottom: 0.5em; border-bottom: 1px solid var(--hairline); }
+  section h3 { font-size: 1.18em; margin: 1.6em 0 0.5em; }
+  p { margin: 0 0 1em; max-width: 72ch; }
+  ul, ol { max-width: 72ch; padding-left: 1.3em; }
+  li { margin-bottom: 0.4em; }
+
+  /* ---------------- chips ---------------- */
+  .chip-row { display: flex; flex-wrap: wrap; gap: 0.5em; margin: 0.7em 0 1.1em; }
+  .chip {
+    display: inline-flex; align-items: center; gap: 0.4em; font-family: var(--mono); font-size: 0.76em;
+    padding: 0.3em 0.65em; border-radius: 999px; border: 1px solid var(--hairline); color: var(--ink-muted);
+  }
+  .chip.role { background: var(--accent-soft); color: var(--accent); border-color: transparent; font-weight: 600; }
+  .chip.good { background: var(--good-soft); color: var(--good); border-color: transparent; }
+  .chip.warn { background: var(--warn-soft); color: var(--warn); border-color: transparent; }
+
+  /* ---------------- callouts ---------------- */
+  .callout { border-radius: 10px; padding: 0.95em 1.15em; margin: 1.1em 0; border: 1px solid var(--hairline); max-width: 72ch; }
+  .callout .label { font-family: var(--mono); font-size: 0.72em; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 0.35em; display: block; }
+  .callout p:last-child { margin-bottom: 0; }
+  .callout.tip { background: var(--good-soft); border-color: transparent; }
+  .callout.tip .label { color: var(--good); }
+  .callout.warn { background: var(--warn-soft); border-color: transparent; }
+  .callout.warn .label { color: var(--warn); }
+  .callout.danger { background: var(--danger-soft); border-color: transparent; }
+  .callout.danger .label { color: var(--danger); }
+
+  /* ---------------- module cards / details ---------------- */
+  details.module {
+    background: var(--paper-raised); border: 1px solid var(--hairline); border-radius: 12px;
+    box-shadow: var(--shadow); margin: 1.2em 0; overflow: hidden;
+  }
+  details.module summary {
+    cursor: pointer; list-style: none; padding: 1em 1.25em; display: flex; align-items: center; gap: 0.8em;
+    font-family: var(--serif); font-weight: 700; font-size: 1.08em;
+  }
+  details.module summary::-webkit-details-marker { display: none; }
+  details.module summary::before {
+    content: '›'; font-family: var(--sans); font-weight: 700; color: var(--ink-faint);
+    transition: transform 0.15s ease; display: inline-block; width: 0.7em;
+  }
+  details.module[open] summary::before { transform: rotate(90deg); }
+  details.module summary .chip { margin-left: auto; font-weight: 400; }
+  .module-body { padding: 0 1.25em 1.25em; border-top: 1px solid var(--hairline); }
+  .module-body > p:first-child { margin-top: 1em; }
+
+  .steps { list-style: none; margin: 1em 0; padding: 0; max-width: none; }
+  .steps li {
+    display: flex; gap: 0.7em; align-items: flex-start; padding: 0.5em 0.4em;
+    border-radius: 8px; font-size: 0.96em;
+  }
+  .steps li:hover { background: var(--code-bg); }
+  .steps input[type="checkbox"] {
+    margin-top: 0.28em; width: 16px; height: 16px; accent-color: var(--accent); flex-shrink: 0; cursor: pointer;
+  }
+  .steps label { cursor: pointer; }
+  .steps .expect { display: block; color: var(--ink-muted); font-size: 0.9em; margin-top: 0.2em; }
+  .steps .expect::before { content: '→ '; color: var(--ink-faint); }
+
+  /* ---------------- tables ---------------- */
+  .table-wrap { overflow-x: auto; margin: 1.1em 0 1.6em; border: 1px solid var(--hairline); border-radius: 10px; }
+  table { border-collapse: collapse; width: 100%; min-width: 560px; font-size: 0.92em; background: var(--paper-raised); }
+  th, td { text-align: left; padding: 0.65em 0.9em; border-bottom: 1px solid var(--hairline); vertical-align: top; }
+  thead th { font-family: var(--mono); font-size: 0.74em; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-faint); background: var(--code-bg); }
+  tbody tr:last-child td { border-bottom: none; }
+  td code { white-space: normal; }
+  .yes { color: var(--good); font-weight: 700; }
+  .no { color: var(--ink-faint); }
+
+  footer.guide-footer {
+    max-width: 1180px; margin: 0 auto; padding: 2em 2em 4em; border-top: 1px solid var(--hairline);
+    color: var(--ink-faint); font-size: 0.85em;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .progress-fill, details.module summary::before { transition: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="progress-wrap">
+  <div class="progress-inner">
+    <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
+    <span id="progress-label">0 / 0 checks complete</span>
+    <button id="reset-checklist" type="button">Reset checklist</button>
+  </div>
+</div>
+
+<div class="masthead">
+  <p class="eyebrow">Elite Knowledge — WordPress Plugin</p>
+  <h1>Full test &amp; walkthrough guide</h1>
+  <p class="lede">A single script for taking Elite Knowledge from a blank WordPress install to a fully verified knowledge base and forum — <strong>every module, every role, every setting.</strong> Run it as a QA pass on a fresh site, or walk a customer through it feature by feature.</p>
+  <div class="audience-row">
+    <div class="audience-card">
+      <div class="k">For QA</div>
+      <p>Follow every phase in order on a disposable staging site. Checkboxes persist in this browser, so you can close the tab and pick back up.</p>
+    </div>
+    <div class="audience-card">
+      <div class="k">For customer demos</div>
+      <p>Skip straight to Phase 4 (the module walkthroughs) — each one doubles as a "here's how you'd use this" script.</p>
+    </div>
+    <div class="audience-card">
+      <div class="k">Reference</div>
+      <p>Jump to the Settings, Roles, and Shortcode tables at the end for quick lookups without re-reading the whole guide.</p>
+    </div>
+  </div>
+</div>
+
+<div class="layout">
+  <nav class="toc" aria-label="Guide sections">
+    <div class="toc-title">Contents</div>
+    <ol>
+      <li><a href="#what-it-is">What this plugin is</a></li>
+      <li><a href="#before-you-start">Before you start</a></li>
+      <li><a href="#phase-1">Phase 1 — Install &amp; activate</a></li>
+      <li><a href="#phase-2">Phase 2 — Initial configuration</a></li>
+      <li><a href="#phase-3">Phase 3 — Load demo content</a></li>
+      <li>
+        <a href="#phase-4">Phase 4 — Test every module</a>
+        <ul class="toc-sub">
+          <li><a href="#mod-topics">Knowledge Topics</a></li>
+          <li><a href="#mod-forums">Forums &amp; Discussions</a></li>
+          <li><a href="#mod-faq">FAQ</a></li>
+          <li><a href="#mod-documents">Documents</a></li>
+          <li><a href="#mod-search">Search &amp; My Activity</a></li>
+        </ul>
+      </li>
+      <li><a href="#phase-5">Phase 5 — Guest, signup &amp; verification</a></li>
+      <li><a href="#phase-6">Phase 6 — Roles &amp; permissions</a></li>
+      <li><a href="#phase-7">Phase 7 — Removal &amp; uninstall</a></li>
+      <li><a href="#troubleshooting">Troubleshooting</a></li>
+      <li><a href="#reference">Reference tables</a></li>
+    </ol>
+  </nav>
+
+  <main>
+
+    <section id="what-it-is">
+      <h2>What this plugin is</h2>
+      <p>Elite Knowledge is two products in one install: a <strong>knowledge base</strong> (Topics, FAQ, Documents) and a <strong>member forum</strong> (Forums → Discussions → threaded Replies), tied together by shared search, a role/verification permission model, and a settings screen that controls how open or gated each part is.</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Area</th><th>Content type</th><th>What it's for</th></tr></thead>
+          <tbody>
+            <tr><td>Knowledge Topics</td><td><code>ek_topic</code></td><td>Long-form articles/guides, browsable by category and tag.</td></tr>
+            <tr><td>Forums</td><td><code>ek_forum</code></td><td>Named forum sections that hold Discussions (e.g. "General Discussion").</td></tr>
+            <tr><td>Discussions</td><td><code>ek_discussion</code> + WP comments</td><td>Member-started threads inside a forum; replies use core comments under the hood.</td></tr>
+            <tr><td>FAQ</td><td><code>ek_faq</code></td><td>Accordion or grid of question/answer pairs, with "was this helpful" voting.</td></tr>
+            <tr><td>Documents</td><td><code>ek_document</code></td><td>Versioned file downloads with five access levels, from public to named users.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>Nothing here needs another plugin — no page builder, no ACF, no custom database tables. It runs on whatever theme is active and stores everything in core WordPress tables, which matters for the removal test in Phase 7.</p>
+    </section>
+
+    <section id="before-you-start">
+      <h2>Before you start</h2>
+      <p>Use a disposable staging site, not production — this guide creates test users, posts, and files, and Phase 7 deliberately tests deletion.</p>
+      <h3>Test accounts to create up front</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Account</th><th>Role</th><th>Used for</th></tr></thead>
+          <tbody>
+            <tr><td>you (existing)</td><td>Administrator</td><td>Configuration, moderation, verification.</td></tr>
+            <tr><td>a second staff account</td><td>Editor</td><td>Confirming moderator-level actions without full admin access.</td></tr>
+            <tr><td>a fresh signup</td><td>Subscriber</td><td>The "brand new member" journey in Phase 5 — don't verify this one until told to.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="callout tip">
+        <span class="label">Tip</span>
+        <p>Use a second browser (or a private window) for the Subscriber account so you can be logged in as two different users side by side — you'll need that to test replies, notifications, and the moderation queue realistically.</p>
+      </div>
+    </section>
+
+    <section id="phase-1">
+      <p class="phase-tag">Phase 1</p>
+      <h2>Install &amp; activate</h2>
+      <ul class="steps">
+        <li><input type="checkbox" data-step="p1-1" id="p1-1"><label for="p1-1">Upload and activate the plugin (Plugins → Add New → Upload, or drop the folder into <code>wp-content/plugins/</code>).<span class="expect">No PHP errors on activation; "Knowledge Center" appears in the wp-admin sidebar.</span></label></li>
+        <li><input type="checkbox" data-step="p1-2" id="p1-2"><label for="p1-2">Visit Knowledge Center → Settings and confirm it loads without errors.<span class="expect">Default settings are pre-filled (see the Settings table in Reference).</span></label></li>
+        <li><input type="checkbox" data-step="p1-3" id="p1-3"><label for="p1-3">Check Forums → All Forums (or Knowledge Center's post list).<span class="expect">A "General Discussion" forum already exists — created automatically on first activation.</span></label></li>
+        <li><input type="checkbox" data-step="p1-4" id="p1-4"><label for="p1-4">Visit Settings → Permalinks and click Save (no changes needed) to be certain rewrite rules are fresh.<span class="expect">Front-end archive URLs (below) resolve instead of 404ing.</span></label></li>
+      </ul>
+      <div class="callout tip">
+        <span class="label">What just happened, invisibly</span>
+        <p>Activation added a set of <code>ek_*</code> capabilities to the Administrator, Editor, Author, Contributor, and Subscriber roles, seeded the <code>ek_settings</code> option with sane defaults, and flushed rewrite rules. None of this touches any other plugin or theme data.</p>
+      </div>
+    </section>
+
+    <section id="phase-2">
+      <p class="phase-tag">Phase 2</p>
+      <h2>Initial configuration</h2>
+      <p>Everything here lives at <strong>Knowledge Center → Settings</strong>. Full field-by-field reference is in the <a href="#ref-settings">Settings table</a> — this phase just confirms each control actually does what it says.</p>
+      <ul class="steps">
+        <li><input type="checkbox" data-step="p2-1" id="p2-1"><label for="p2-1">Leave "Use the theme's own page template" <strong>off</strong> for the first pass, and click "Create Missing Pages Now".<span class="expect">A Page is created for each of Topics, Forums, FAQ, Documents, and My Activity, each holding just that section's shortcode.</span></label></li>
+        <li><input type="checkbox" data-step="p2-2" id="p2-2"><label for="p2-2">Set Results per page to something small (e.g. 3) temporarily.<span class="expect">Later, list pages paginate after 3 items — confirms pagination works before switching it back.</span></label></li>
+        <li><input type="checkbox" data-step="p2-3" id="p2-3"><label for="p2-3">Leave "Who can start discussions" / "Who can reply" at their defaults (every role checked).<span class="expect">You'll narrow these deliberately in Phase 6.</span></label></li>
+        <li><input type="checkbox" data-step="p2-4" id="p2-4"><label for="p2-4">Leave "Moderate first discussion" checked (it's the default).<span class="expect">Tested directly in Phase 4's Forums walkthrough.</span></label></li>
+        <li><input type="checkbox" data-step="p2-5" id="p2-5"><label for="p2-5">Save Changes.<span class="expect">Settings page reloads with your values retained.</span></label></li>
+      </ul>
+      <div class="callout warn">
+        <span class="label">Theme content mode</span>
+        <p>Turning on "Use the theme's own page template" routes single/archive views through the active theme's normal <code>single.php</code>/<code>page.php</code> via <code>the_content</code>, instead of the plugin's own full-page templates — useful when a theme's header/sidebar must always appear, but it also disables the built-in archives, so every section then depends on the landing pages above existing. Worth a dedicated pass with it toggled on if the site's theme needs that.</p>
+      </div>
+    </section>
+
+    <section id="phase-3">
+      <p class="phase-tag">Phase 3</p>
+      <h2>Load demo content</h2>
+      <p>Knowledge Center → Demo Data gives you one click to populate every module with realistic sample content, which makes Phase 4 far faster to run.</p>
+      <ul class="steps">
+        <li><input type="checkbox" data-step="p3-1" id="p3-1"><label for="p3-1">Click "Import Demo Content".<span class="expect">Topics, forums with discussions and replies, FAQ entries, and documents (with versions and mixed access levels) appear across the site.</span></label></li>
+        <li><input type="checkbox" data-step="p3-2" id="p3-2"><label for="p3-2">Browse a couple of the demo pages to sanity-check content rendered correctly.<span class="expect">No missing images, no shortcode text printed literally.</span></label></li>
+        <li><input type="checkbox" data-step="p3-3" id="p3-3"><label for="p3-3">Later, once Phase 4–7 are done: return here and click "Remove Demo Content".<span class="expect">Every demo post, term, attachment, and demo-only user is gone; nothing else on the site is touched.</span></label></li>
+      </ul>
+      <div class="callout tip">
+        <span class="label">Skip this for a customer demo?</span>
+        <p>Don't — it's the fastest way to show a client what a populated site looks like without them having to imagine it from an empty state.</p>
+      </div>
+    </section>
+
+    <section id="phase-4">
+      <p class="phase-tag">Phase 4</p>
+      <h2>Test every module</h2>
+      <p>Each module below is self-contained — expand the ones you need. Every walkthrough works as a script you can narrate to a customer as-is.</p>
+
+      <details class="module" id="mod-topics" open>
+        <summary>Knowledge Topics<span class="chip">Requires: none to browse</span></summary>
+        <div class="module-body">
+          <p>Long-form articles, organized by category/tag, with related-articles suggestions and a search box up top.</p>
+          <ul class="steps">
+            <li><input type="checkbox" data-step="p4t-1" id="p4t-1"><label for="p4t-1">Visit the Topics landing page (or the archive, if theme content mode is off).<span class="expect">Cards show title, excerpt, and a "View Topic" button; equal-height cards even when excerpts differ in length.</span></label></li>
+            <li><input type="checkbox" data-step="p4t-2" id="p4t-2"><label for="p4t-2">Open a topic assigned to a category.<span class="expect">Category badges appear under the title; a "Related Topics" block lists others sharing that category.</span></label></li>
+            <li><input type="checkbox" data-step="p4t-3" id="p4t-3"><label for="p4t-3">Scroll to the bottom of a topic.<span class="expect">A comment form appears (Topics accept comments, styled the same as forum replies) — see the Forums module for who's allowed to use it.</span></label></li>
+            <li><input type="checkbox" data-step="p4t-4" id="p4t-4"><label for="p4t-4">As Administrator, create a new Topic in wp-admin, assign a category, publish.<span class="expect">It appears on the archive and inside its category's Related Topics blocks immediately.</span></label></li>
+          </ul>
+        </div>
+      </details>
+
+      <details class="module" id="mod-forums">
+        <summary>Forums &amp; Discussions<span class="chip">Requires: verified account to post</span></summary>
+        <div class="module-body">
+          <p>The plugin's most involved module — forums hold discussions, discussions hold threaded replies (built on core WordPress comments), and moderators get pin/close/solve controls plus a flagged-replies queue.</p>
+          <h3>As a member (Subscriber test account)</h3>
+          <ul class="steps">
+            <li><input type="checkbox" data-step="p4f-1" id="p4f-1"><label for="p4f-1">Open a forum while logged out first.<span class="expect">You can read every discussion and reply; where a reply form would be, a "Join the Discussion" notice offers log in / create an account links instead.</span></label></li>
+            <li><input type="checkbox" data-step="p4f-2" id="p4f-2"><label for="p4f-2">Log in as the Subscriber test account (not yet verified) and open the same forum.<span class="expect">A "Start a Discussion" form is visible but submitting shows "awaiting verification" — see Phase 5 for the full flow.</span></label></li>
+            <li><input type="checkbox" data-step="p4f-3" id="p4f-3"><label for="p4f-3">After verifying that account (Phase 5), start a discussion with a title, message, and an attached image.<span class="expect">Redirects straight to the new discussion thread; if "Moderate first discussion" is on, it publishes as Pending until an admin approves it.</span></label></li>
+            <li><input type="checkbox" data-step="p4f-4" id="p4f-4"><label for="p4f-4">Reply to your own discussion, then reply again nested under that reply.<span class="expect">Threaded replies render up to 6 levels deep; a "View N replies" toggle appears on threads with children.</span></label></li>
+            <li><input type="checkbox" data-step="p4f-5" id="p4f-5"><label for="p4f-5">Edit your own reply, then delete it.<span class="expect">An "Edited" label appears after editing; deleting trashes the comment and it disappears from the thread.</span></label></li>
+            <li><input type="checkbox" data-step="p4f-6" id="p4f-6"><label for="p4f-6">Click "Subscribe to replies" on the discussion, then have a second account reply to it.<span class="expect">An email notification arrives (check the site's mail log/Mailhog on local) — you're never notified of your own replies.</span></label></li>
+          </ul>
+          <h3>As a moderator (Administrator/Editor)</h3>
+          <ul class="steps">
+            <li><input type="checkbox" data-step="p4f-7" id="p4f-7"><label for="p4f-7">On any discussion, use the "Manage" menu to Pin it, Mark as Solved, and Close it to replies.<span class="expect">Badges (Pinned/Solved/Closed) appear next to the title; pinned threads float to the top of the forum listing; a closed thread hides its reply form.</span></label></li>
+            <li><input type="checkbox" data-step="p4f-8" id="p4f-8"><label for="p4f-8">Mark one reply as the "Best Answer".<span class="expect">A "Best Answer" badge prefixes that reply's text; marking a different reply moves the badge instead of duplicating it.</span></label></li>
+            <li><input type="checkbox" data-step="p4f-9" id="p4f-9"><label for="p4f-9">Log in as a third account, open a reply that isn't yours, and click Report.<span class="expect">Button changes to a disabled "Reported" state; the reply now appears in Knowledge Center → Flagged Replies with a report count.</span></label></li>
+            <li><input type="checkbox" data-step="p4f-10" id="p4f-10"><label for="p4f-10">From Flagged Replies, Dismiss one report and Delete another.<span class="expect">Dismiss clears the flag and the reply stays; Delete permanently removes the reply from its thread.</span></label></li>
+            <li><input type="checkbox" data-step="p4f-11" id="p4f-11"><label for="p4f-11">If a Pending discussion exists (from the moderate-first-post setting), approve it from wp-admin.<span class="expect">It becomes publicly visible in its forum.</span></label></li>
+          </ul>
+        </div>
+      </details>
+
+      <details class="module" id="mod-faq">
+        <summary>FAQ<span class="chip">Requires: login to vote only</span></summary>
+        <div class="module-body">
+          <ul class="steps">
+            <li><input type="checkbox" data-step="p4q-1" id="p4q-1"><label for="p4q-1">Visit the FAQ page.<span class="expect">Questions are grouped under category headings, collapsed into an accordion; clicking a question expands its answer.</span></label></li>
+            <li><input type="checkbox" data-step="p4q-2" id="p4q-2"><label for="p4q-2">Place <code>[ek_faq_grid columns="3"]</code> on a test page.<span class="expect">Same FAQ content renders as a 3-column grid with answers always visible — no accordion.</span></label></li>
+            <li><input type="checkbox" data-step="p4q-3" id="p4q-3"><label for="p4q-3">While logged out, expand a question.<span class="expect">"Was this helpful?" is replaced with a log in / create account prompt instead of Yes/No buttons.</span></label></li>
+            <li><input type="checkbox" data-step="p4q-4" id="p4q-4"><label for="p4q-4">Log in and vote Yes on one FAQ.<span class="expect">Buttons are replaced with "You already voted — X of Y people found it helpful."; voting again isn't offered.</span></label></li>
+          </ul>
+        </div>
+      </details>
+
+      <details class="module" id="mod-documents">
+        <summary>Documents<span class="chip">Requires: varies by access mode</span></summary>
+        <div class="module-body">
+          <p>Create one test document per access mode and confirm each behaves as its label promises — this is the plugin's most security-relevant surface, worth testing thoroughly.</p>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Access mode</th><th>Who should see it</th><th>Test as</th></tr></thead>
+              <tbody>
+                <tr><td>Everyone</td><td>Anyone, logged out included</td><td>Logged-out visitor</td></tr>
+                <tr><td>Logged-in users</td><td>Any authenticated account</td><td>Any logged-in test account</td></tr>
+                <tr><td>Verified members</td><td>Only accounts a moderator has verified</td><td>Verified vs. unverified account</td></tr>
+                <tr><td>Specific roles</td><td>Roles you check in the document's Access Control box</td><td>An included and an excluded role</td></tr>
+                <tr><td>Specific people</td><td>Only the listed user IDs</td><td>A listed and an unlisted account</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <ul class="steps">
+            <li><input type="checkbox" data-step="p4d-1" id="p4d-1"><label for="p4d-1">For each access mode above, confirm an allowed viewer can see the "Download" button and a disallowed viewer sees "Restricted Document" instead.<span class="expect">Matches the table exactly — including logged-out users on "Everyone".</span></label></li>
+            <li><input type="checkbox" data-step="p4d-2" id="p4d-2"><label for="p4d-2">Upload a second file version to one document, with a version label.<span class="expect">Version History table appears with both versions and their individual download links.</span></label></li>
+            <li><input type="checkbox" data-step="p4d-3" id="p4d-3"><label for="p4d-3">Download a document and check the download counter.<span class="expect">"N total downloads" increments by 1 each time.</span></label></li>
+            <li><input type="checkbox" data-step="p4d-4" id="p4d-4"><label for="p4d-4">As a disallowed viewer, find the document's raw attachment URL (e.g. via "Copy Link" on the file) and open it directly, bypassing the Download button.<span class="expect">Redirected back to the document's "Restricted" notice — the file itself isn't reachable by URL.</span></label></li>
+          </ul>
+        </div>
+      </details>
+
+      <details class="module" id="mod-search">
+        <summary>Search &amp; My Activity<span class="chip">Requires: login for My Activity</span></summary>
+        <div class="module-body">
+          <ul class="steps">
+            <li><input type="checkbox" data-step="p4s-1" id="p4s-1"><label for="p4s-1">Use the search box (from the hub, or <code>[ek_search]</code>) for a term that appears in a Topic and a Discussion.<span class="expect">Results page groups by type (Topic/Discussion/FAQ/Document) with an excerpt for each.</span></label></li>
+            <li><input type="checkbox" data-step="p4s-2" id="p4s-2"><label for="p4s-2">Search for a term that only appears in a restricted Document you can't access.<span class="expect">It's excluded from your results entirely — the title never leaks.</span></label></li>
+            <li><input type="checkbox" data-step="p4s-3" id="p4s-3"><label for="p4s-3">Visit the My Activity page while logged out, then again while logged in with a discussion and a reply to your name.<span class="expect">Logged out: a log in / create account prompt. Logged in: "Your Discussions" and "Your Replies" lists, each linking straight to the thread.</span></label></li>
+          </ul>
+        </div>
+      </details>
+    </section>
+
+    <section id="phase-5">
+      <p class="phase-tag">Phase 5</p>
+      <h2>Guest, signup &amp; verification flow</h2>
+      <p>This is the journey every new member actually takes, end to end — worth running exactly in this order once, since it's the flow most support questions will be about.</p>
+      <ul class="steps">
+        <li><input type="checkbox" data-step="p5-1" id="p5-1"><label for="p5-1">Log out entirely and browse Topics, a Forum, an FAQ, and a public Document.<span class="expect">Everything open to guests is fully readable; every place a login-gated action would normally sit (reply, start discussion, vote, view restricted content) instead shows a plain-language notice with log in / create an account links.</span></label></li>
+        <li><input type="checkbox" data-step="p5-2" id="p5-2"><label for="p5-2">Register a brand-new account through one of those links.<span class="expect">Lands as a Subscriber by default (or whatever role your site's Settings → General → "New User Default Role" specifies).</span></label></li>
+        <li><input type="checkbox" data-step="p5-3" id="p5-3"><label for="p5-3">Immediately try to start a discussion or post a reply as that new account.<span class="expect">Blocked with "Your account is awaiting verification" — role membership alone isn't enough to post; a moderator has to vouch for the account first.</span></label></li>
+        <li><input type="checkbox" data-step="p5-4" id="p5-4"><label for="p5-4">As Administrator, go to Users, find the new account, click "Verify".<span class="expect">A "Verified" badge appears in the Users list for that account; the row action now reads "Unverify".</span></label></li>
+        <li><input type="checkbox" data-step="p5-5" id="p5-5"><label for="p5-5">Back on the member account, retry starting a discussion and replying.<span class="expect">Both now work normally.</span></label></li>
+        <li><input type="checkbox" data-step="p5-6" id="p5-6"><label for="p5-6">Check your own Administrator account on the Users list.<span class="expect">No Verify/Unverify action appears at all for admins/moderators — they're always treated as verified and the control would be a no-op, so it's hidden rather than shown broken.</span></label></li>
+        <li><input type="checkbox" data-step="p5-7" id="p5-7"><label for="p5-7">Log in as the Subscriber account and try visiting <code>/wp-admin/</code> directly.<span class="expect">Redirected straight back to the front end — ordinary members manage everything (posting, replies, their own activity) without ever needing the dashboard. Editors, Administrators, and anyone granted moderator rights keep normal wp-admin access.</span></label></li>
+      </ul>
+      <div class="callout warn">
+        <span class="label">Why this matters for support</span>
+        <p>"I registered and can't post" is the single most likely ticket this plugin generates. The fix is always the same: Users → find them → Verify.</p>
+      </div>
+    </section>
+
+    <section id="phase-6">
+      <p class="phase-tag">Phase 6</p>
+      <h2>Roles &amp; permissions</h2>
+      <p>Two separate systems stack on top of each other, and it's worth testing both independently so a support request ("why can't X post?") is quick to diagnose.</p>
+      <ol>
+        <li><strong>Role whitelist</strong> (Settings → "Who can start discussions" / "Who can reply") — a straight checklist of which roles are allowed at all, including any custom roles your site defines.</li>
+        <li><strong>Verification</strong> (Phase 5) — a per-account manual flag on top of the whitelist. Even a whitelisted role can't post until verified.</li>
+      </ol>
+      <ul class="steps">
+        <li><input type="checkbox" data-step="p6-1" id="p6-1"><label for="p6-1">Uncheck "Subscriber" under "Who can reply to discussions" and save.<span class="expect">A verified Subscriber account can still start new discussions but their reply form is replaced with a permission notice — distinct wording from the "awaiting verification" one.</span></label></li>
+        <li><input type="checkbox" data-step="p6-2" id="p6-2"><label for="p6-2">Re-check Subscriber and save.<span class="expect">Reply access returns immediately, no re-verification needed.</span></label></li>
+        <li><input type="checkbox" data-step="p6-3" id="p6-3"><label for="p6-3">If the site has custom roles (a club's "Coach"/"Player", a school's "Parent"/"Staff", etc.), confirm they appear in the same checklist.<span class="expect">The whitelist isn't limited to WordPress's five default roles — anything registered on the site shows up here automatically.</span></label></li>
+      </ul>
+    </section>
+
+    <section id="phase-7">
+      <p class="phase-tag">Phase 7</p>
+      <h2>Removal &amp; uninstall</h2>
+      <p>Save this for last — it's destructive by design. Confirm behavior in both directions: a safe deactivate, and an intentional full wipe.</p>
+      <h3>Deactivate only</h3>
+      <ul class="steps">
+        <li><input type="checkbox" data-step="p7-1" id="p7-1"><label for="p7-1">Deactivate the plugin from the Plugins list.<span class="expect">No confirmation prompt, no data touched. Front-end URLs for topics/forums/etc. now 404, since the post types are no longer registered.</span></label></li>
+        <li><input type="checkbox" data-step="p7-2" id="p7-2"><label for="p7-2">Reactivate it.<span class="expect">All prior content, settings, and verified statuses are exactly as you left them — nothing needed re-creating.</span></label></li>
+      </ul>
+      <h3>Full uninstall</h3>
+      <ul class="steps">
+        <li><input type="checkbox" data-step="p7-3" id="p7-3"><label for="p7-3">In Settings, check "Delete all Elite Knowledge content and settings when the plugin is uninstalled" and save.<span class="expect">This is the only thing that arms deletion — it's off by default.</span></label></li>
+        <li><input type="checkbox" data-step="p7-4" id="p7-4"><label for="p7-4">Deactivate, then click "Delete" from the Plugins list.<span class="expect">Every Topic, Forum, Discussion, FAQ, Document, their taxonomy terms, demo content, the custom capabilities, and every plugin option are gone. Nothing outside the plugin's own data is touched.</span></label></li>
+      </ul>
+      <div class="callout danger">
+        <span class="label">Before you do this on a real site</span>
+        <p>Without that checkbox ticked, deleting the plugin leaves every discussion, document, and setting sitting inertly in the database indefinitely — which is usually what you want. Only tick it when the intent is a genuine, permanent wipe.</p>
+      </div>
+    </section>
+
+    <section id="troubleshooting">
+      <h2>Troubleshooting</h2>
+      <h3>Titles or headings look oversized, cut off, or misaligned</h3>
+      <p>Themes sometimes ship their own global heading styles (a big fluid <code>h3</code> font size, for instance) that can collide with the plugin's card layouts. This plugin also supports themes shipping their own template overrides in a <code>elite-knowledge/</code> folder inside the theme — if a theme has one, check its stylesheet for generic heading rules first; that's the more likely culprit than the plugin's own CSS.</p>
+      <h3>A brand-new member says they can't post anything</h3>
+      <p>Check, in order: are they logged in at all → is their role checked under Settings → "Who can start discussions/reply" → have they been Verified on the Users list (Phase 5). The three failure states show visibly different notices on the front end, which tells you which one you're looking at without needing to check the database.</p>
+      <h3>A document's file downloads even though it should be restricted</h3>
+      <p>Confirm the file was actually uploaded through the document's own "Select File" button in wp-admin, not attached directly through the normal Media Library — only files added that way get moved into the access-controlled storage location and have their direct URLs blocked.</p>
+    </section>
+
+    <section id="reference">
+      <h2>Reference tables</h2>
+
+      <h3 id="ref-settings">Settings (Knowledge Center → Settings)</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Setting</th><th>Default</th><th>Effect</th></tr></thead>
+          <tbody>
+            <tr><td>Use the theme's own page template</td><td>Off</td><td>Renders through the theme's normal single/page template instead of the plugin's full-page templates; disables built-in archives.</td></tr>
+            <tr><td>Landing pages (Topics/Forums/FAQ/Documents/My Activity)</td><td>Built-in archive</td><td>Points navigation and <code>[ek_hub]</code> at a specific Page instead of the default archive.</td></tr>
+            <tr><td>Who can start discussions / reply</td><td>All roles</td><td>Role whitelist for posting — independent of, and in addition to, account verification.</td></tr>
+            <tr><td>Results per page</td><td>20</td><td>Pagination size across Topics, Documents, Discussions, and Search.</td></tr>
+            <tr><td>Moderate new discussions</td><td>Off</td><td>Every new discussion holds for approval before it's public.</td></tr>
+            <tr><td>Moderate first discussion</td><td>On</td><td>Only a member's very first discussion holds for approval; later ones publish immediately.</td></tr>
+            <tr><td>Require login to view</td><td>Off</td><td>Gates the whole knowledge center behind login (documents keep their own access rules regardless).</td></tr>
+            <tr><td>Delete data on uninstall</td><td>Off</td><td>Arms the full data wipe described in Phase 7 — otherwise uninstalling never deletes anything.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Capabilities by default role</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Role</th><th>Start discussions</th><th>Reply</th><th>Upload documents</th><th>Moderate</th><th>Manage settings</th></tr></thead>
+          <tbody>
+            <tr><td>Administrator</td><td class="yes">Yes</td><td class="yes">Yes</td><td class="yes">Yes</td><td class="yes">Yes</td><td class="yes">Yes</td></tr>
+            <tr><td>Editor</td><td class="yes">Yes</td><td class="yes">Yes</td><td class="yes">Yes</td><td class="yes">Yes</td><td class="yes">Yes</td></tr>
+            <tr><td>Author</td><td class="yes">Yes</td><td class="yes">Yes</td><td class="yes">Yes</td><td class="no">—</td><td class="no">—</td></tr>
+            <tr><td>Contributor</td><td class="yes">Yes</td><td class="yes">Yes</td><td class="no">—</td><td class="no">—</td><td class="no">—</td></tr>
+            <tr><td>Subscriber</td><td class="yes">Yes</td><td class="yes">Yes</td><td class="no">—</td><td class="no">—</td><td class="no">—</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>All of the above additionally require the account to be <strong>verified</strong> before "start discussions"/"reply" actually take effect — see Phase 5. Adjustable per-site under Settings → role whitelists; custom roles from other plugins or a site's own setup appear there automatically.</p>
+
+      <h3>Shortcodes</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Shortcode</th><th>Attributes</th><th>Renders</th></tr></thead>
+          <tbody>
+            <tr><td><code>[ek_hub]</code></td><td><code>topics_url</code>, <code>forums_url</code>, <code>faq_url</code>, <code>documents_url</code></td><td>Card grid linking to each section, with live counts.</td></tr>
+            <tr><td><code>[ek_topics]</code></td><td><code>category</code>, <code>count</code></td><td>List of knowledge topics.</td></tr>
+            <tr><td><code>[ek_forums]</code></td><td>—</td><td>List of all forums.</td></tr>
+            <tr><td><code>[ek_discussions forum_id="…"]</code></td><td><code>forum_id</code></td><td>Discussions inside one forum, plus the new-discussion form.</td></tr>
+            <tr><td><code>[ek_new_discussion_form forum_id="…"]</code></td><td><code>forum_id</code></td><td>Just the new-discussion form on its own.</td></tr>
+            <tr><td><code>[ek_faq]</code></td><td><code>category</code>, <code>group_by_category</code></td><td>FAQ accordion, grouped by category by default.</td></tr>
+            <tr><td><code>[ek_faq_grid]</code></td><td><code>category</code>, <code>columns</code> (1–3)</td><td>FAQ as an always-expanded card grid.</td></tr>
+            <tr><td><code>[ek_documents]</code></td><td><code>category</code>, <code>count</code></td><td>Document repository listing.</td></tr>
+            <tr><td><code>[ek_search]</code></td><td><code>results_page</code></td><td>Site-wide search form.</td></tr>
+            <tr><td><code>[ek_search_results]</code></td><td>—</td><td>Renders results for the search form above.</td></tr>
+            <tr><td><code>[ek_my_activity]</code></td><td>—</td><td>The logged-in visitor's own discussions and replies.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Document access modes</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Mode</th><th>Who can view/download</th></tr></thead>
+          <tbody>
+            <tr><td>Everyone</td><td>Any visitor, logged in or not.</td></tr>
+            <tr><td>Logged-in users</td><td>Any account, regardless of role or verification.</td></tr>
+            <tr><td>Verified members</td><td>Only accounts a moderator has manually verified.</td></tr>
+            <tr><td>Specific roles</td><td>Only the roles checked in that document's Access Control box.</td></tr>
+            <tr><td>Specific people</td><td>Only the listed user IDs.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>Accounts with "View restricted documents" (Administrators/Editors by default) can always preview any document regardless of mode.</p>
+    </section>
+
+  </main>
+</div>
+
+<footer class="guide-footer">
+  Elite Knowledge test &amp; walkthrough guide — checklist state is stored only in this browser (<code>localStorage</code>), never sent anywhere.
+</footer>
+
+<script>
+(function () {
+  var KEY = 'ek-guide-checklist-v1';
+  var state = {};
+  try { state = JSON.parse(localStorage.getItem(KEY) || '{}'); } catch (e) { state = {}; }
+
+  var boxes = Array.prototype.slice.call(document.querySelectorAll('input[type="checkbox"][data-step]'));
+
+  function updateProgress() {
+    var total = boxes.length;
+    var done = boxes.filter(function (cb) { return cb.checked; }).length;
+    var fill = document.getElementById('progress-fill');
+    var label = document.getElementById('progress-label');
+    var pct = total ? Math.round((done / total) * 100) : 0;
+    if (fill) fill.style.width = pct + '%';
+    if (label) label.textContent = done + ' / ' + total + ' checks complete';
+  }
+
+  boxes.forEach(function (cb) {
+    var id = cb.getAttribute('data-step');
+    if (state[id]) cb.checked = true;
+    cb.addEventListener('change', function () {
+      state[id] = cb.checked;
+      try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {}
+      updateProgress();
+    });
+  });
+
+  var resetBtn = document.getElementById('reset-checklist');
+  if (resetBtn) {
+    resetBtn.addEventListener('click', function () {
+      if (!window.confirm('Clear all checked items on this device?')) return;
+      state = {};
+      try { localStorage.removeItem(KEY); } catch (e) {}
+      boxes.forEach(function (cb) { cb.checked = false; });
+      updateProgress();
+    });
+  }
+
+  updateProgress();
+})();
+</script>
+</body>
+</html>
