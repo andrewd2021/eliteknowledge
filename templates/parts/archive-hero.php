@@ -34,4 +34,24 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<?php if ( ! empty( $count ) ) : ?>
 		<span class="ek-hero-count"><?php echo esc_html( $count ); ?></span>
 	<?php endif; ?>
+	<?php
+	// Surfaces "My Activity" on every archive page (Topics/Forums/FAQ/
+	// Documents all include this shared part), not just buried in a
+	// discussion-page sidebar — see EK_Forum::render_discussion_related_content()
+	// for the other place this same link/setting is used.
+	if ( is_user_logged_in() ) :
+		$ek_hero_settings = get_option( 'ek_settings', array() );
+		if ( ! empty( $ek_hero_settings['page_my_activity'] ) ) :
+			$ek_hero_my_activity_url = EK_Shortcodes::resolve_section_url( '', $ek_hero_settings['page_my_activity'], '' );
+			if ( $ek_hero_my_activity_url ) :
+				?>
+				<a class="ek-hero-my-activity" href="<?php echo esc_url( $ek_hero_my_activity_url ); ?>">
+					<?php echo EK_Icons::get( 'chat', 'ek-icon-inline' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+					<?php esc_html_e( 'My Activity', 'elite-knowledge' ); ?>
+				</a>
+				<?php
+			endif;
+		endif;
+	endif;
+	?>
 </div>

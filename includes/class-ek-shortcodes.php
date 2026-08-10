@@ -376,6 +376,14 @@ class EK_Shortcodes {
 
 		ob_start();
 
+		// See EK_Forum::handle_new_discussion_submit() — a discussion held
+		// for moderation redirects here (not to its own, not-yet-public
+		// permalink) with this flag, since a subscriber-level author can't
+		// reliably view a 'pending' post's page directly.
+		if ( isset( $_GET['ek_notice'] ) && 'pending_review' === $_GET['ek_notice'] ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+			echo '<p class="ek-notice">' . esc_html__( 'Your discussion has been submitted and is awaiting moderator approval. It will appear here once approved.', 'elite-knowledge' ) . '</p>';
+		}
+
 		// new_discussion_form() already gates itself (guest notice, or
 		// silently empty for a logged-in user without permission) — no
 		// need to duplicate that check here, and calling it unconditionally

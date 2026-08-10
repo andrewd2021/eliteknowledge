@@ -66,7 +66,7 @@ class EK_Verification {
 	public static function handle_toggle() {
 		$user_id = isset( $_GET['user_id'] ) ? absint( $_GET['user_id'] ) : 0;
 
-		if ( ! $user_id || ! current_user_can( 'ek_moderate_discussions' ) ) {
+		if ( ! $user_id || ! self::can_manage_verification() ) {
 			wp_die( esc_html__( 'You do not have permission to do that.', 'elite-knowledge' ), 403 );
 		}
 		if ( ! isset( $_GET['_wpnonce'] ) || ! wp_verify_nonce( $_GET['_wpnonce'], 'ek_toggle_verified_' . $user_id ) ) {
@@ -86,8 +86,18 @@ class EK_Verification {
 		exit;
 	}
 
+	/**
+	 * Same manage_options fallback as is_verified() — a site where the
+	 * ek_moderate_discussions capability didn't (yet) make it onto the
+	 * Administrator role shouldn't also lose the ability to grant it to
+	 * anyone else via this screen.
+	 */
+	private static function can_manage_verification() {
+		return current_user_can( 'ek_moderate_discussions' ) || current_user_can( 'manage_options' );
+	}
+
 	public static function add_column( $columns ) {
-		if ( current_user_can( 'ek_moderate_discussions' ) ) {
+		if ( self::can_manage_verification() ) {
 			$columns['ek_verified'] = __( 'Verified', 'elite-knowledge' );
 		}
 		return $columns;
@@ -106,7 +116,7 @@ class EK_Verification {
 	}
 
 	public static function add_row_action( $actions, $user ) {
-		if ( ! current_user_can( 'ek_moderate_discussions' ) ) {
+		if ( ! self::can_manage_verification() ) {
 			return $actions;
 		}
 

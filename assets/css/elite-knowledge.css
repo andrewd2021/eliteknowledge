@@ -151,6 +151,28 @@
 	white-space: nowrap;
 }
 
+.ek-hero-my-activity {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.4em;
+	flex-shrink: 0;
+	padding: 0.5em 1.1em;
+	border-radius: 999px;
+	border: 1px solid rgba(255, 255, 255, 0.4);
+	background: transparent;
+	color: #fff;
+	font-size: 0.85em;
+	font-weight: 600;
+	white-space: nowrap;
+	transition: background 0.15s ease, border-color 0.15s ease;
+}
+.ek-hero-my-activity:hover {
+	background: rgba(255, 255, 255, 0.15);
+	border-color: rgba(255, 255, 255, 0.7);
+	color: #fff;
+	text-decoration: none;
+}
+
 @media (max-width: 640px) {
 	.ek-hero { padding: 1.75em 1.5em; }
 }
@@ -259,6 +281,31 @@
 .ek-new-discussion-form label { display: block; font-weight: 600; margin-bottom: 0.4em; }
 .ek-cancel-edit { margin-left: 0.75em; }
 .ek-captcha { background: var(--ek-surface-muted); border-radius: 10px; padding: 1em; }
+
+.ek-image-preview {
+	display: flex;
+	align-items: center;
+	gap: 0.6em;
+	margin-top: 0.6em;
+	padding: 0.5em 0.75em;
+	background: var(--ek-surface-muted);
+	border: 1px solid var(--ek-border);
+	border-radius: 8px;
+}
+.ek-image-preview img {
+	width: 2.5em;
+	height: 2.5em;
+	object-fit: cover;
+	border-radius: 6px;
+	flex-shrink: 0;
+}
+.ek-image-preview-name {
+	font-size: 0.85em;
+	color: var(--ek-muted);
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
 
 /* ============================================================ Badges */
 

@@ -373,6 +373,8 @@ class EK_Admin {
 		$clean['require_login_to_view']     = empty( $input['require_login_to_view'] ) ? 0 : 1;
 		$clean['moderate_new_discussions']  = empty( $input['moderate_new_discussions'] ) ? 0 : 1;
 		$clean['moderate_first_discussion'] = empty( $input['moderate_first_discussion'] ) ? 0 : 1;
+		$clean['moderate_replies']          = empty( $input['moderate_replies'] ) ? 0 : 1;
+		$clean['require_email_confirmation'] = empty( $input['require_email_confirmation'] ) ? 0 : 1;
 		$clean['delete_data_on_uninstall']  = empty( $input['delete_data_on_uninstall'] ) ? 0 : 1;
 		$clean['theme_content_mode']        = empty( $input['theme_content_mode'] ) ? 0 : 1;
 
@@ -416,6 +418,8 @@ class EK_Admin {
 			'require_login_to_view'      => 0,
 			'moderate_new_discussions'   => 0,
 			'moderate_first_discussion'  => 1,
+			'moderate_replies'           => 0,
+			'require_email_confirmation' => 0,
 			'theme_content_mode'         => 0,
 			'page_topics'                => 0,
 			'page_forums'                => 0,
@@ -519,6 +523,26 @@ class EK_Admin {
 								<input type="checkbox" name="<?php echo esc_attr( self::OPTION_NAME ); ?>[moderate_first_discussion]" value="1" <?php checked( $settings['moderate_first_discussion'], 1 ); ?>>
 								<?php esc_html_e( "A user's very first discussion requires approval; later ones publish normally. A lightweight anti-spam measure that doesn't slow down regular contributors.", 'elite-knowledge' ); ?>
 							</label>
+						</td>
+					</tr>
+					<tr>
+						<th scope="row"><?php esc_html_e( 'Moderate replies', 'elite-knowledge' ); ?></th>
+						<td>
+							<label>
+								<input type="checkbox" name="<?php echo esc_attr( self::OPTION_NAME ); ?>[moderate_replies]" value="1" <?php checked( $settings['moderate_replies'], 1 ); ?>>
+								<?php esc_html_e( 'Every reply requires moderator approval before it appears (moderators\' own replies always publish immediately)', 'elite-knowledge' ); ?>
+							</label>
+							<p class="description"><?php esc_html_e( 'Off by default, since it adds real friction to normal conversation — worth turning on temporarily if a verified account starts flooding replies. Without this, whether replies need approval is left entirely to your core WordPress Settings → Discussion options.', 'elite-knowledge' ); ?></p>
+						</td>
+					</tr>
+					<tr>
+						<th scope="row"><?php esc_html_e( 'Require email confirmation', 'elite-knowledge' ); ?></th>
+						<td>
+							<label>
+								<input type="checkbox" name="<?php echo esc_attr( self::OPTION_NAME ); ?>[require_email_confirmation]" value="1" <?php checked( $settings['require_email_confirmation'], 1 ); ?>>
+								<?php esc_html_e( 'New self-registered accounts must click a link emailed to them before they can log in', 'elite-knowledge' ); ?>
+							</label>
+							<p class="description"><?php esc_html_e( "Cuts down on junk/bot registrations cluttering the Users list before a moderator ever needs to look at them. This confirms the email address is real, not that the person is trustworthy — it doesn't replace manually Verifying an account before they can post.", 'elite-knowledge' ); ?></p>
 						</td>
 					</tr>
 					<tr>

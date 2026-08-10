@@ -725,7 +725,19 @@ class EK_Forum {
 			set_post_thumbnail( $post_id, $image_id );
 		}
 
-		wp_safe_redirect( get_permalink( $post_id ) );
+		if ( $needs_moderation ) {
+			// A 'pending' post's own permalink isn't reliably viewable by its
+			// front-end author — WordPress's singular-post resolution for a
+			// non-published custom post type generally requires an edit
+			// capability on that exact post, which a plain subscriber author
+			// doesn't have here (see EK_Post_Types::build_capabilities()) —
+			// so redirecting straight to it 404s. Send them back to the
+			// forum with a clear "submitted, awaiting approval" notice
+			// instead of a broken link.
+			wp_safe_redirect( add_query_arg( 'ek_notice', 'pending_review', get_permalink( $forum_id ) ) );
+		} else {
+			wp_safe_redirect( get_permalink( $post_id ) );
+		}
 		exit;
 	}
 
@@ -760,8 +772,12 @@ class EK_Forum {
 				<span class="ek-current-image"><?php echo wp_get_attachment_image( $current_attachment_id, 'thumbnail' ); ?></span>
 				<label><input type="checkbox" name="ek_remove_image" value="1"> <?php esc_html_e( 'Remove current image', 'elite-knowledge' ); ?></label><br>
 			<?php endif; ?>
-			<input type="file" name="ek_image" id="ek_image" accept=".jpg,.jpeg,.png,.gif,.webp">
+			<input type="file" name="ek_image" id="ek_image" class="ek-image-input" accept=".jpg,.jpeg,.png,.gif,.webp">
 			<span class="description"><?php esc_html_e( 'JPG, PNG, GIF, or WebP. Max 2MB.', 'elite-knowledge' ); ?></span>
+			<!-- Filled in by JS the moment a file is chosen (filename +
+			     thumbnail) — the bare file input by itself gives no
+			     confirmation that a selection actually registered. -->
+			<div class="ek-image-preview" hidden></div>
 		</p>
 		<?php
 	}

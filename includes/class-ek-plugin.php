@@ -36,6 +36,7 @@ class EK_Plugin {
 		require_once EK_PLUGIN_DIR . 'includes/class-ek-deactivator.php';
 		require_once EK_PLUGIN_DIR . 'includes/class-ek-capabilities.php';
 		require_once EK_PLUGIN_DIR . 'includes/class-ek-verification.php';
+		require_once EK_PLUGIN_DIR . 'includes/class-ek-email-confirmation.php';
 		require_once EK_PLUGIN_DIR . 'includes/class-ek-post-types.php';
 		require_once EK_PLUGIN_DIR . 'includes/class-ek-forum.php';
 		require_once EK_PLUGIN_DIR . 'includes/class-ek-documents.php';
@@ -60,6 +61,7 @@ class EK_Plugin {
 	private function init_hooks() {
 		EK_Post_Types::init();
 		EK_Verification::init();
+		EK_Email_Confirmation::init();
 		EK_Forum::init();
 		EK_Documents::init();
 		EK_Faq::init();
@@ -100,6 +102,18 @@ class EK_Plugin {
 		if ( get_option( 'ek_needs_rewrite_flush' ) ) {
 			flush_rewrite_rules();
 			delete_option( 'ek_needs_rewrite_flush' );
+		}
+
+		// One-time, version-independent: EK_Capabilities::add_caps() only
+		// normally runs from EK_Activator::activate(), which fires on a
+		// real inactive→active transition in wp-admin — not on a plugin
+		// whose files were replaced on disk while it stayed "active" the
+		// whole time (e.g. a manual restore). Re-syncing here once, self-
+		// healing, is cheap and idempotent (add_cap() no-ops if already
+		// granted), so it's safe to run on an already-correct site too.
+		if ( ! get_option( 'ek_caps_resynced_v1' ) ) {
+			EK_Capabilities::add_caps();
+			update_option( 'ek_caps_resynced_v1', 1 );
 		}
 	}
 

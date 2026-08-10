@@ -45,12 +45,31 @@ class EK_Post_Types {
 	 * single "manage" capability, so map_meta_cap resolves cleanly without
 	 * needing a whole family of granular ek_edit_x/ek_delete_x capabilities
 	 * for content that's really only ever managed by moderators/editors.
+	 *
+	 * The singular meta caps (edit_post/read_post/delete_post) deliberately
+	 * get a DIFFERENT string from the plural ones below, not the same
+	 * $manage_cap value — reusing the identical string for both used to
+	 * make WordPress's own map_meta_cap() treat a blanket check like
+	 * current_user_can('edit_posts') (e.g. its own admin-menu-visibility
+	 * check for this post type) as if it were the per-post 'edit_post'
+	 * check instead, via the alias table _post_type_meta_capabilities()
+	 * builds from every registered post type's capability names. That
+	 * redirects into logic requiring a real post ID; with none available
+	 * in a blanket context, it silently resolved to 'do_not_allow' for
+	 * every single content type here, which is exactly what was hiding
+	 * the Forums/Discussions/FAQ/Documents admin menus. The suffixed
+	 * string just needs to be unique — WordPress's own 'edit_post'
+	 * resolution, once it finds a real post, checks post ownership and
+	 * then falls back to the plural edit_posts/edit_others_posts
+	 * capabilities anyway, so nothing needs to separately grant this
+	 * suffixed capability to any role for per-post editing to keep working.
 	 */
 	private static function build_capabilities( $manage_cap ) {
+		$single_cap = $manage_cap . '_item';
 		return array(
-			'edit_post'              => $manage_cap,
-			'read_post'              => $manage_cap,
-			'delete_post'            => $manage_cap,
+			'edit_post'              => $single_cap,
+			'read_post'              => $single_cap,
+			'delete_post'            => $single_cap,
 			'edit_posts'             => $manage_cap,
 			'edit_others_posts'      => $manage_cap,
 			'publish_posts'          => $manage_cap,

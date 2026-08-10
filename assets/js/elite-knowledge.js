@@ -309,4 +309,42 @@
 		quote.appendChild( document.createTextNode( snippet ) );
 		preview.appendChild( quote );
 	} );
+
+	/* ---------------------------------------------------------- image upload preview */
+
+	// The bare <input type="file"> in EK_Forum::render_image_field() gives
+	// no confirmation a selection actually registered beyond whatever the
+	// browser's own (often easy-to-miss) native filename text shows —
+	// surface a thumbnail + filename explicitly once a file is chosen.
+	document.addEventListener( 'change', function ( e ) {
+		var input = e.target.closest( '.ek-image-input' );
+		if ( ! input ) {
+			return;
+		}
+		var wrap    = input.closest( 'p' );
+		var preview = wrap ? wrap.querySelector( '.ek-image-preview' ) : null;
+		if ( ! preview ) {
+			return;
+		}
+
+		var file = input.files && input.files[0];
+		if ( ! file ) {
+			preview.hidden = true;
+			preview.innerHTML = '';
+			return;
+		}
+
+		var img = document.createElement( 'img' );
+		img.src = URL.createObjectURL( file );
+		img.alt = '';
+
+		var name = document.createElement( 'span' );
+		name.className = 'ek-image-preview-name';
+		name.textContent = file.name;
+
+		preview.innerHTML = '';
+		preview.appendChild( img );
+		preview.appendChild( name );
+		preview.hidden = false;
+	} );
 } )();

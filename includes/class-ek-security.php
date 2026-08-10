@@ -37,6 +37,13 @@ class EK_Security {
 		add_filter( 'posts_results', array( __CLASS__, 'strip_inaccessible_documents_from_rest_collections' ), 10, 2 );
 
 		add_action( 'admin_init', array( __CLASS__, 'redirect_members_from_admin' ) );
+
+		// Registration-time spam protection — same honeypot + math captcha
+		// used on the front-end reply/discussion forms, reused here since
+		// core WordPress's self-registration form (wp-login.php?action=
+		// register) has no spam protection of its own at all.
+		add_action( 'register_form', array( __CLASS__, 'render_registration_protection' ) );
+		add_filter( 'registration_errors', array( __CLASS__, 'validate_registration_protection' ), 10, 1 );
 	}
 
 	/* ---------------------------------------------------------- wp-admin access */
@@ -233,7 +240,44 @@ class EK_Security {
 			wp_die( esc_html__( 'You are replying too quickly. Please wait a few minutes and try again.', 'elite-knowledge' ) );
 		}
 
+		// Opt-in, off by default (see Settings → "Moderate replies") — holds
+		// every non-moderator reply for approval, on top of (not instead
+		// of) everything above. Worth turning on temporarily if a verified
+		// account starts flooding replies faster than rate limiting alone
+		// makes worthwhile to spam; moderators' own replies always still
+		// publish immediately, since holding your own moderation queue for
+		// yourself would be pointless.
+		$settings = get_option( 'ek_settings', array() );
+		if ( ! empty( $settings['moderate_replies'] ) && ! current_user_can( 'ek_moderate_discussions' ) ) {
+			return 0;
+		}
+
 		return $approved;
+	}
+
+	/* ---------------------------------------------------------- registration protection */
+
+	/**
+	 * Outputs the same honeypot + math captcha used on the front-end
+	 * discussion/reply forms, but on core WordPress's own self-registration
+	 * form — which otherwise has no spam protection of its own, making it
+	 * the easiest way to flood the Users list with junk accounts even
+	 * though none of them can post anything until manually Verified.
+	 */
+	public static function render_registration_protection() {
+		self::honeypot_field();
+		self::captcha_field();
+	}
+
+	public static function validate_registration_protection( $errors ) {
+		if ( ! self::passes_honeypot() ) {
+			$errors->add( 'ek_honeypot', __( '<strong>Error:</strong> Your registration looked automated and was blocked. Please try again.', 'elite-knowledge' ) );
+			return $errors;
+		}
+		if ( ! self::passes_captcha() ) {
+			$errors->add( 'ek_captcha', __( '<strong>Error:</strong> The spam check answer was incorrect. Please try again.', 'elite-knowledge' ) );
+		}
+		return $errors;
 	}
 
 	/* ---------------------------------------------------------- REST API access control */

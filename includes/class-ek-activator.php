@@ -39,6 +39,8 @@ class EK_Activator {
 				'require_login_to_view'      => 0,
 				'moderate_new_discussions'   => 0,
 				'moderate_first_discussion'  => 1,
+				'moderate_replies'           => 0,
+				'require_email_confirmation' => 0,
 				'theme_content_mode'         => 0,
 				'page_topics'                => 0,
 				'page_forums'                => 0,
