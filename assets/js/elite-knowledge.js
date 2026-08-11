@@ -236,6 +236,28 @@
 		}
 	} );
 
+	/* ---------------------------------------------------------- new-discussion form toggle */
+
+	onClick( '.ek-toggle-new-discussion', function ( button ) {
+		var toolbar = button.closest( '.ek-discussions-toolbar' );
+		var target  = toolbar ? toolbar.nextElementSibling : null;
+		if ( ! target ) {
+			return;
+		}
+		var expanded = 'true' === button.getAttribute( 'aria-expanded' );
+		button.setAttribute( 'aria-expanded', expanded ? 'false' : 'true' );
+		target.hidden = expanded;
+		button.textContent = expanded
+			? button.getAttribute( 'data-label-open' )
+			: button.getAttribute( 'data-label-close' );
+		if ( ! expanded ) {
+			var titleInput = target.querySelector( '#ek_title' );
+			if ( titleInput ) {
+				titleInput.focus();
+			}
+		}
+	} );
+
 	/* ---------------------------------------------------------- discussion "Manage" dropdown */
 
 	onClick( '.ek-dropdown-toggle', function ( button, e ) {

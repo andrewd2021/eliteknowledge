@@ -4,7 +4,7 @@
  * Plugin Name:       Elite Knowledge
  * Plugin URI:        https://example.com/elite-knowledge
  * Description:       A complete knowledge center: topics, forums with threaded discussions, FAQs, and an access-controlled document repository.
- * Version:           1.1.5
+ * Version:           1.1.6
  * Requires at least: 5.9
  * Requires PHP:      7.4
  * Author:            Elite Knowledge
@@ -18,7 +18,7 @@ if (! defined('ABSPATH')) {
 	exit; // No direct access.
 }
 
-define('EK_VERSION', '1.1.5');
+define('EK_VERSION', '1.1.6');
 define('EK_PLUGIN_FILE', __FILE__);
 define('EK_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('EK_PLUGIN_URL', plugin_dir_url(__FILE__));

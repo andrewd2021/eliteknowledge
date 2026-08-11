@@ -510,6 +510,20 @@
 .ek-forum-meta { display: flex; align-items: center; color: var(--ek-muted); font-size: 0.85em; }
 .ek-forum-arrow { flex-shrink: 0; color: var(--ek-muted); }
 
+/* New Post / My Activity toolbar above a forum's discussion list */
+.ek-discussions-toolbar { display: flex; flex-wrap: wrap; gap: 0.75em; margin: 1.5em 0; }
+.ek-button-outline {
+	display: inline-flex; align-items: center; gap: 0.4em;
+	padding: 0.7em 1.5em; border-radius: 999px; border: 1px solid var(--ek-border);
+	background: var(--ek-surface); font-weight: 600; font-size: 1em; cursor: pointer;
+}
+/* Scoped under .ek-wrap, same specificity fix as .ek-button — a bare
+   ".ek-button-outline" loses to ".ek-wrap a" since this is an <a>. */
+.ek-wrap .ek-button-outline, .ek-wrap .ek-button-outline:visited { color: var(--ek-text); }
+.ek-wrap .ek-button-outline:hover { border-color: var(--ek-primary); color: var(--ek-primary); text-decoration: none; }
+.ek-new-discussion-wrap[hidden] { display: none; }
+.ek-new-discussion-wrap .ek-new-discussion-form { margin-top: 0; }
+
 /* Discussions table */
 .ek-discussions-table { width: 100%; border-collapse: collapse; margin: 1.5em 0; }
 .ek-discussions-table th {

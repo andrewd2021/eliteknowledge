@@ -389,7 +389,41 @@ class EK_Shortcodes {
 		// need to duplicate that check here, and calling it unconditionally
 		// is what lets guests see the "log in or create an account to
 		// start a discussion" prompt rather than the section just vanishing.
-		echo do_shortcode( '[ek_new_discussion_form forum_id="' . $forum_id . '"]' );
+		$new_discussion_html = do_shortcode( '[ek_new_discussion_form forum_id="' . $forum_id . '"]' );
+
+		$settings         = self::settings();
+		$my_activity_url  = '';
+		if ( is_user_logged_in() && ! empty( $settings['page_my_activity'] ) ) {
+			$my_activity_url = self::resolve_section_url( '', $settings['page_my_activity'], '' );
+		}
+
+		if ( $new_discussion_html || $my_activity_url ) {
+			// Left open by default only when a submission just bounced back
+			// with a validation/captcha error — otherwise the form starts
+			// collapsed behind the toggle button below, rather than always
+			// taking up the top of the page (see EK_Shortcodes::render_form_error_notice()
+			// for the same $_GET['ek_error'] read, display-only, no nonce needed).
+			$auto_open = $new_discussion_html && ! empty( $_GET['ek_error'] ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+
+			echo '<div class="ek-discussions-toolbar">';
+			if ( $new_discussion_html ) {
+				printf(
+					'<button type="button" class="ek-button ek-toggle-new-discussion" aria-expanded="%1$s" data-label-open="%2$s" data-label-close="%3$s">%4$s</button>',
+					$auto_open ? 'true' : 'false',
+					esc_attr__( 'New Post', 'elite-knowledge' ),
+					esc_attr__( 'Cancel', 'elite-knowledge' ),
+					$auto_open ? esc_html__( 'Cancel', 'elite-knowledge' ) : esc_html__( 'New Post', 'elite-knowledge' )
+				);
+			}
+			if ( $my_activity_url ) {
+				echo '<a class="ek-button-outline" href="' . esc_url( $my_activity_url ) . '">' . esc_html__( 'My Activity', 'elite-knowledge' ) . '</a>';
+			}
+			echo '</div>';
+
+			if ( $new_discussion_html ) {
+				echo '<div class="ek-new-discussion-wrap"' . ( $auto_open ? '' : ' hidden' ) . '>' . $new_discussion_html . '</div>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			}
+		}
 
 		echo '<table class="ek-discussions-table"><thead><tr>';
 		echo '<th>' . esc_html__( 'Discussion', 'elite-knowledge' ) . '</th>';
