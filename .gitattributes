@@ -1,0 +1,5 @@
+# Files kept in the repo for development but left out of `git archive`
+# exports (e.g. the release zip built via `git archive ... -o file.zip`).
+.gitignore export-ignore
+.gitattributes export-ignore
+README.md export-ignore
