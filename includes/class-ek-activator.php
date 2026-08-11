@@ -20,6 +20,9 @@ class EK_Activator {
 		self::maybe_create_default_forum();
 		self::maybe_create_search_results_page();
 
+		require_once EK_PLUGIN_DIR . 'includes/class-ek-documents.php';
+		EK_Documents::protect_document_dir();
+
 		flush_rewrite_rules();
 
 		update_option( 'ek_activation_version', EK_VERSION );
@@ -108,6 +111,14 @@ class EK_Activator {
 			if ( ! is_wp_error( $new_id ) && $new_id ) {
 				$settings['page_search_results'] = $new_id;
 				update_option( 'ek_settings', $settings );
+
+				// Recorded separately from settings['page_search_results']
+				// because an admin can freely repoint that setting at any
+				// existing page later (same as page_topics/page_forums/etc.)
+				// — this keeps a stable record of the specific page WE
+				// created, so uninstall can remove it without also deleting
+				// whatever unrelated page the setting might point to by then.
+				update_option( 'ek_auto_created_search_page_id', $new_id );
 			}
 		}
 

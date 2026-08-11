@@ -95,6 +95,13 @@ class EK_Plugin {
 			EK_Post_Types::register_all();
 			EK_Forum::backfill_topic_comment_types();
 			EK_Documents::backfill_attachment_document_ids();
+			// Re-syncs capabilities on every version bump, not just once ever
+			// (see the one-time resync below) — a future release that adds a
+			// new capability to EK_Capabilities::default_map() would
+			// otherwise never reach sites that already ran the one-time
+			// resync. add_cap() no-ops for caps a role already has, so this
+			// is safe to run on every upgrade.
+			EK_Capabilities::add_caps();
 			flush_rewrite_rules();
 			update_option( 'ek_activation_version', EK_VERSION );
 		}

@@ -65,7 +65,29 @@ if ( $demo_user_ids ) {
 require_once plugin_dir_path( __FILE__ ) . 'includes/class-ek-capabilities.php';
 EK_Capabilities::remove_caps();
 
+// The one non-CPT page this plugin creates on activation (see
+// EK_Activator::maybe_create_search_results_page()) — everything else it
+// creates is one of the post types already deleted above.
+$search_page_id = (int) get_option( 'ek_auto_created_search_page_id' );
+if ( $search_page_id ) {
+	wp_delete_post( $search_page_id, true );
+}
+
+// Verification/email-confirmation meta on real (non-demo) users — demo
+// users are already fully removed above, but a real member who was
+// verified or confirmed their email leaves these behind otherwise.
+delete_metadata( 'user', 0, '_ek_verified_at', '', true );
+delete_metadata( 'user', 0, '_ek_verified_by', '', true );
+delete_metadata( 'user', 0, '_ek_email_confirm_token', '', true );
+delete_metadata( 'user', 0, '_ek_email_confirmed', '', true );
+
 delete_option( 'ek_settings' );
 delete_option( 'ek_activation_version' );
 delete_option( 'ek_default_forum_created' );
 delete_option( 'ek_demo_data_imported' );
+delete_option( 'ek_show_guide_notice' );
+delete_option( 'ek_search_page_created' );
+delete_option( 'ek_auto_created_search_page_id' );
+delete_option( 'ek_caps_resynced_v1' );
+delete_option( 'ek_needs_rewrite_flush' );
+delete_option( 'ek_document_protection_failed' );

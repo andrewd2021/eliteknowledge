@@ -104,7 +104,7 @@ class EK_Forum {
 	}
 
 	public static function ajax_update_reply() {
-		check_ajax_referer( 'ek_forum_admin', 'nonce' );
+		check_ajax_referer( 'ek_update_reply', 'nonce' );
 
 		$comment_id = isset( $_POST['comment_id'] ) ? absint( $_POST['comment_id'] ) : 0;
 		$comment    = get_comment( $comment_id );
@@ -144,7 +144,7 @@ class EK_Forum {
 	}
 
 	public static function ajax_delete_reply() {
-		check_ajax_referer( 'ek_forum_admin', 'nonce' );
+		check_ajax_referer( 'ek_delete_reply', 'nonce' );
 
 		$comment_id = isset( $_POST['comment_id'] ) ? absint( $_POST['comment_id'] ) : 0;
 		$comment    = get_comment( $comment_id );
@@ -165,7 +165,7 @@ class EK_Forum {
 	}
 
 	public static function ajax_flag_reply() {
-		check_ajax_referer( 'ek_forum_admin', 'nonce' );
+		check_ajax_referer( 'ek_flag_reply', 'nonce' );
 
 		if ( ! is_user_logged_in() ) {
 			wp_send_json_error( array( 'message' => __( 'Please log in to report a reply.', 'elite-knowledge' ) ), 401 );
@@ -990,21 +990,21 @@ class EK_Forum {
 
 	public static function ajax_toggle_pin() {
 		// Pinning affects the whole forum listing, so it stays moderator-only.
-		self::ajax_toggle_meta( 'pinned', false );
+		self::ajax_toggle_meta( 'pinned', false, 'ek_toggle_pin' );
 	}
 
 	public static function ajax_toggle_close() {
 		// An author closing their own resolved thread is normal forum
 		// behavior, so allow it in addition to moderators.
-		self::ajax_toggle_meta( 'closed', true );
+		self::ajax_toggle_meta( 'closed', true, 'ek_toggle_close' );
 	}
 
 	public static function ajax_toggle_solved() {
-		self::ajax_toggle_meta( 'solved', true );
+		self::ajax_toggle_meta( 'solved', true, 'ek_toggle_solved' );
 	}
 
-	private static function ajax_toggle_meta( $meta_suffix, $allow_author ) {
-		check_ajax_referer( 'ek_forum_admin', 'nonce' );
+	private static function ajax_toggle_meta( $meta_suffix, $allow_author, $nonce_action ) {
+		check_ajax_referer( $nonce_action, 'nonce' );
 
 		$discussion_id = isset( $_POST['discussion_id'] ) ? absint( $_POST['discussion_id'] ) : 0;
 		$discussion    = get_post( $discussion_id );
@@ -1026,7 +1026,7 @@ class EK_Forum {
 	}
 
 	public static function ajax_mark_best_answer() {
-		check_ajax_referer( 'ek_forum_admin', 'nonce' );
+		check_ajax_referer( 'ek_mark_best_answer', 'nonce' );
 
 		$comment_id = isset( $_POST['comment_id'] ) ? absint( $_POST['comment_id'] ) : 0;
 		$comment    = get_comment( $comment_id );

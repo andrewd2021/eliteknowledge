@@ -15,9 +15,11 @@ class EK_Documents {
 		add_action( 'save_post_ek_document', array( __CLASS__, 'save_meta_boxes' ), 10, 2 );
 
 		add_action( 'init', array( __CLASS__, 'add_download_endpoint' ) );
+		add_action( 'init', array( __CLASS__, 'protect_document_dir' ) );
 		add_filter( 'query_vars', array( __CLASS__, 'add_query_vars' ) );
 		add_action( 'template_redirect', array( __CLASS__, 'maybe_handle_download' ) );
 		add_action( 'admin_notices', array( __CLASS__, 'render_admin_notice' ) );
+		add_action( 'admin_notices', array( __CLASS__, 'render_protection_failed_notice' ) );
 
 		// A document's underlying attachment is still a normal WP media item
 		// with its own public permalink/REST entry — without this, anyone
@@ -202,15 +204,93 @@ class EK_Documents {
 	}
 
 	/**
-	 * Name of the uploads subdirectory nginx/Apache is configured to deny
-	 * direct requests to (see conf/nginx/site.conf.hbs on this Local site).
-	 * Document files must live here — nowhere else is blocked at the
-	 * server level, so they'd otherwise be served directly, bypassing
-	 * user_can_access() entirely regardless of any WordPress-level check.
+	 * Name of the uploads subdirectory document files live in. Direct
+	 * requests to it are blocked by an .htaccess this plugin writes itself
+	 * (see protect_document_dir()) — files must live here, nowhere else is
+	 * blocked at the server level, so they'd otherwise be served directly,
+	 * bypassing user_can_access() entirely regardless of any WordPress-level
+	 * check.
 	 */
 	public static function protected_dir_path() {
 		$upload_dir = wp_upload_dir();
 		return trailingslashit( $upload_dir['basedir'] ) . 'ek-documents';
+	}
+
+	/**
+	 * Ensures the protected uploads subdirectory exists and carries an
+	 * .htaccess denying direct requests, on every 'init' — not just on
+	 * activation — so sites upgrading from a version without this
+	 * protection (or an .htaccess a host regenerated/stripped) get it back
+	 * without needing to re-run activation. Apache/LiteSpeed only: hosts
+	 * running nginx don't read .htaccess and must add an equivalent
+	 * "location" block denying /wp-content/uploads/ek-documents/ themselves.
+	 */
+	public static function protect_document_dir() {
+		$dir = self::protected_dir_path();
+		if ( ! file_exists( $dir ) ) {
+			wp_mkdir_p( $dir );
+		}
+		update_option( 'ek_document_protection_failed', self::write_protection_files( $dir ) ? 0 : 1 );
+	}
+
+	/**
+	 * Marker string checked for below — if a host's backup/deploy tooling
+	 * ever leaves a stale or hand-edited .htaccess in place, file_exists()
+	 * alone would treat that as "already protected" and never restore the
+	 * real rule.
+	 */
+	const HTACCESS_MARKER = 'Elite Knowledge: block direct access';
+
+	/**
+	 * Writes the .htaccess (covering both the Apache 2.4 and 2.2 access
+	 * control syntaxes, since we can't know which the host runs) and an
+	 * empty index.php (blocks directory listing if Options +Indexes is on)
+	 * into $dir, unless a valid copy is already there. Returns false if
+	 * either file couldn't be written (e.g. a read-only uploads directory),
+	 * so callers can warn that restricted documents may not be enforced.
+	 */
+	private static function write_protection_files( $dir ) {
+		$ok = true;
+
+		$htaccess = trailingslashit( $dir ) . '.htaccess';
+		$existing = file_exists( $htaccess ) ? @file_get_contents( $htaccess ) : false;
+		if ( false === $existing || false === strpos( $existing, self::HTACCESS_MARKER ) ) {
+			$contents = "# " . self::HTACCESS_MARKER . ".\n"
+				. "<IfModule mod_authz_core.c>\n"
+				. "\tRequire all denied\n"
+				. "</IfModule>\n"
+				. "<IfModule !mod_authz_core.c>\n"
+				. "\tOrder allow,deny\n"
+				. "\tDeny from all\n"
+				. "</IfModule>\n";
+			if ( false === @file_put_contents( $htaccess, $contents ) ) {
+				$ok = false;
+			}
+		}
+
+		$index = trailingslashit( $dir ) . 'index.php';
+		if ( ! file_exists( $index ) && false === @file_put_contents( $index, "<?php\n// Silence is golden.\n" ) ) {
+			$ok = false;
+		}
+
+		return $ok;
+	}
+
+	/**
+	 * Warns whoever can act on it (not just whoever happened to trigger the
+	 * write — protect_document_dir() runs on every 'init', not just in
+	 * wp-admin) that the server-level block for restricted documents
+	 * couldn't be written, so they know to check filesystem permissions or
+	 * add an equivalent rule themselves.
+	 */
+	public static function render_protection_failed_notice() {
+		if ( ! get_option( 'ek_document_protection_failed' ) || ! current_user_can( 'manage_options' ) ) {
+			return;
+		}
+		printf(
+			'<div class="notice notice-error"><p>%s</p></div>',
+			esc_html__( 'Elite Knowledge could not write a protective .htaccess to the restricted documents folder (wp-content/uploads/ek-documents/). Restricted documents may be downloadable via direct link until this is fixed — check that WordPress can write to your uploads directory, or block direct access to that folder at the server level yourself.', 'elite-knowledge' )
+		);
 	}
 
 	/**
@@ -231,6 +311,7 @@ class EK_Documents {
 		}
 
 		wp_mkdir_p( $protected_dir );
+		self::write_protection_files( $protected_dir );
 
 		$filename = wp_unique_filename( $protected_dir, basename( $old_path ) );
 		$new_path = trailingslashit( $protected_dir ) . $filename;

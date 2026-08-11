@@ -106,7 +106,7 @@ class EK_Subscriptions {
 	}
 
 	public static function ajax_toggle_subscription() {
-		check_ajax_referer( 'ek_forum_admin', 'nonce' );
+		check_ajax_referer( 'ek_toggle_subscription', 'nonce' );
 
 		if ( ! is_user_logged_in() ) {
 			wp_send_json_error( array( 'message' => __( 'Please log in.', 'elite-knowledge' ) ), 401 );

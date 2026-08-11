@@ -18,18 +18,25 @@
 	}
 
 	var AJAX_URL = window.ekForum.ajaxUrl;
-	var NONCE    = window.ekForum.nonce;
+	var NONCES   = window.ekForum.nonces || {};
 
+	// Network/parse failures (offline, timeout, a non-JSON error page from
+	// the server) used to reject silently — the caller's .then() never ran,
+	// so a disabled button stayed disabled forever with no feedback. Every
+	// call site now gets a rejected promise it can catch instead.
 	function post( action, data ) {
 		var body = new FormData();
 		body.append( 'action', action );
-		body.append( 'nonce', NONCE );
+		body.append( 'nonce', NONCES[ action ] || '' );
 		Object.keys( data || {} ).forEach( function ( key ) {
 			body.append( key, data[ key ] );
 		} );
 
 		return fetch( AJAX_URL, { method: 'POST', credentials: 'same-origin', body: body } )
-			.then( function ( response ) { return response.json(); } );
+			.then( function ( response ) { return response.json(); } )
+			.catch( function () {
+				return { success: false, data: { message: 'Network error. Please check your connection and try again.' } };
+			} );
 	}
 
 	function onClick( selector, handler ) {

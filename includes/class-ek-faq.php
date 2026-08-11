@@ -45,7 +45,7 @@ class EK_Faq {
 	}
 
 	public static function ajax_feedback() {
-		check_ajax_referer( 'ek_forum_admin', 'nonce' );
+		check_ajax_referer( 'ek_faq_feedback', 'nonce' );
 
 		// Registered nopriv too as a defensive fallback (matches the rest
 		// of this plugin's AJAX endpoints), even though the front-end

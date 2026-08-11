@@ -160,13 +160,21 @@
 	border-radius: 999px;
 	border: 1px solid rgba(255, 255, 255, 0.4);
 	background: transparent;
-	color: #fff;
 	font-size: 0.85em;
 	font-weight: 600;
 	white-space: nowrap;
 	transition: background 0.15s ease, border-color 0.15s ease;
 }
-.ek-hero-my-activity:hover {
+/* Scoped under .ek-hero (same trick as the ".ek-wrap .ek-button" fixes
+ * above) so this beats a theme's own "a:link, a:visited { color: ... }"
+ * rule — that pairing has one more specificity component than a bare
+ * ".ek-hero-my-activity" class and otherwise repaints this link in the
+ * theme's link color, which reads as near-invisible on the hero gradient. */
+.ek-hero .ek-hero-my-activity,
+.ek-hero .ek-hero-my-activity:visited {
+	color: #fff;
+}
+.ek-hero .ek-hero-my-activity:hover {
 	background: rgba(255, 255, 255, 0.15);
 	border-color: rgba(255, 255, 255, 0.7);
 	color: #fff;
@@ -191,7 +199,7 @@
 .ek-entry-content { font-size: 1.02em; line-height: 1.75; }
 .ek-entry-content p:last-child { margin-bottom: 0; }
 .ek-entry-image { margin: 1.25em 0; }
-.ek-entry-image img { width: 100%; height: auto; border-radius: var(--ek-radius); display: block; }
+.ek-entry-image img { max-width: min(100%, 640px); width: auto; height: auto; max-height: 480px; object-fit: contain; border-radius: var(--ek-radius); display: block; }
 .ek-entry-categories { margin-bottom: 1em; display: flex; flex-wrap: wrap; gap: 0.5em; }
 
 .ek-breadcrumb { margin: 0 0 1.25em; font-size: 0.92em; }
@@ -292,6 +300,7 @@
 	border: 1px solid var(--ek-border);
 	border-radius: 8px;
 }
+.ek-image-preview[hidden] { display: none; }
 .ek-image-preview img {
 	width: 2.5em;
 	height: 2.5em;
@@ -322,6 +331,7 @@
 	color: var(--ek-muted);
 	vertical-align: middle;
 }
+.ek-badge[hidden] { display: none; }
 .ek-badge-pinned { background: #fff4d6; color: #92650b; border-color: #f6dfa0; }
 .ek-badge-closed { background: #fde3e3; color: #b42318; border-color: #f5b8b8; }
 .ek-badge-solved { background: #e6f7ec; color: #0f7a3d; border-color: #b6e6c8; }
@@ -390,7 +400,11 @@
 	color: var(--ek-text);
 	transition: box-shadow 0.2s ease, transform 0.2s ease;
 }
-.ek-hub-card:hover { box-shadow: var(--ek-shadow-hover); transform: translateY(-3px); text-decoration: none; }
+/* Scoped under .ek-wrap (same trick as the ".ek-wrap .ek-button:hover" fix
+ * above) — a bare ".ek-hub-card:hover" loses a specificity fight to
+ * ".ek-wrap a:hover" since this card is itself an <a>, which otherwise
+ * draws a stray underline through the card on hover. */
+.ek-wrap .ek-hub-card:hover { box-shadow: var(--ek-shadow-hover); transform: translateY(-3px); text-decoration: none; }
 .ek-hub-card-icon {
 	display: inline-flex; align-items: center; justify-content: center;
 	width: 2.75em; height: 2.75em; border-radius: 12px; flex-shrink: 0;
@@ -482,7 +496,8 @@
 	color: var(--ek-text);
 	transition: box-shadow 0.2s ease, transform 0.2s ease;
 }
-.ek-forum-row:hover { box-shadow: var(--ek-shadow-hover); transform: translateY(-2px); text-decoration: none; }
+/* Same specificity fix as .ek-hub-card:hover above. */
+.ek-wrap .ek-forum-row:hover { box-shadow: var(--ek-shadow-hover); transform: translateY(-2px); text-decoration: none; }
 .ek-forum-icon {
 	display: inline-flex; align-items: center; justify-content: center;
 	width: 2.75em; height: 2.75em; border-radius: 12px; flex-shrink: 0;
@@ -517,10 +532,18 @@
 .ek-dropdown-toggle:hover { border-color: var(--ek-primary); color: var(--ek-primary); }
 .ek-dropdown-caret { font-size: 0.7em; }
 .ek-dropdown-menu {
+	display: none;
 	position: absolute; top: calc(100% + 0.4em); left: 0; z-index: 20;
-	min-width: 220px; background: var(--ek-surface); border: 1px solid var(--ek-border);
+	box-sizing: border-box;
+	min-width: 220px;
+	/* Caps the menu's width to whatever's left of the viewport so it can
+	   shrink instead of running off the right edge on narrow screens (the
+	   toggle can sit anywhere in the wrapped toolbar). */
+	max-width: calc(100vw - 2.5em);
+	background: var(--ek-surface); border: 1px solid var(--ek-border);
 	border-radius: 10px; box-shadow: var(--ek-shadow-hover); padding: 0.4em;
 }
+.ek-dropdown-toggle[aria-expanded="true"] + .ek-dropdown-menu { display: block; }
 .ek-dropdown-menu a, .ek-dropdown-menu button {
 	display: block; width: 100%; text-align: left; padding: 0.55em 0.7em;
 	border-radius: 6px; border: none; background: none; color: var(--ek-text);
@@ -739,4 +762,9 @@
 	.ek-discussions-table, .ek-discussions-table tbody, .ek-discussions-table tr, .ek-discussions-table td { display: block; width: 100%; }
 	.ek-discussions-table tr { padding: 1em 0; border-bottom: 1px solid var(--ek-border); }
 	.ek-discussions-table td { padding: 0.2em 0; border-bottom: none; }
+
+	.ek-versions-table thead { display: none; }
+	.ek-versions-table, .ek-versions-table tbody, .ek-versions-table tr, .ek-versions-table td { display: block; width: 100%; }
+	.ek-versions-table tr { padding: 0.75em 0; border-bottom: 1px solid var(--ek-border); }
+	.ek-versions-table td { padding: 0.15em 0; border-bottom: none; }
 }
