@@ -766,7 +766,7 @@ class EK_Forum {
 
 	public static function render_image_field( $current_attachment_id = 0 ) {
 		?>
-		<p>
+		<div class="ek-image-field">
 			<label for="ek_image"><?php esc_html_e( 'Attach an image (optional)', 'elite-knowledge' ); ?></label><br>
 			<?php if ( $current_attachment_id ) : ?>
 				<span class="ek-current-image"><?php echo wp_get_attachment_image( $current_attachment_id, 'thumbnail' ); ?></span>
@@ -776,9 +776,16 @@ class EK_Forum {
 			<span class="description"><?php esc_html_e( 'JPG, PNG, GIF, or WebP. Max 2MB.', 'elite-knowledge' ); ?></span>
 			<!-- Filled in by JS the moment a file is chosen (filename +
 			     thumbnail) — the bare file input by itself gives no
-			     confirmation that a selection actually registered. -->
+			     confirmation that a selection actually registered.
+			     A block-level element, not a <p>: a <div> isn't valid
+			     content inside <p>, and browsers respond to that by
+			     auto-closing the </p> right before it — silently hoisting
+			     this div out to become a sibling instead of a child, which
+			     broke the JS below (input.closest('p') no longer contained
+			     it, so the preview never rendered no matter what the file
+			     input did). -->
 			<div class="ek-image-preview" hidden></div>
-		</p>
+		</div>
 		<?php
 	}
 

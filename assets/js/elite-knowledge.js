@@ -328,7 +328,7 @@
 		if ( ! input ) {
 			return;
 		}
-		var wrap    = input.closest( 'p' );
+		var wrap    = input.closest( '.ek-image-field' );
 		var preview = wrap ? wrap.querySelector( '.ek-image-preview' ) : null;
 		if ( ! preview ) {
 			return;

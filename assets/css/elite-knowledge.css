@@ -285,7 +285,7 @@
 	padding: 1.5em;
 	margin-bottom: 1.75em;
 }
-.ek-new-discussion-form p { margin: 0 0 1.1em; }
+.ek-new-discussion-form p, .ek-new-discussion-form .ek-image-field { margin: 0 0 1.1em; }
 .ek-new-discussion-form label { display: block; font-weight: 600; margin-bottom: 0.4em; }
 .ek-cancel-edit { margin-left: 0.75em; }
 .ek-captcha { background: var(--ek-surface-muted); border-radius: 10px; padding: 1em; }
